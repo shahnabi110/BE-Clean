@@ -2,14 +2,13 @@
 
 @layer base {
   :root {
-    --bg-black: #000000;
-    --bg-card: #121212;
-    --bg-card-hover: #1a1a1a;
-    --border-color: #262626;
-    --accent-gold: #D4AF37;
-    --accent-whatsapp: #25D366;
-    --accent-blue: #00539F;
-    --accent-orange: #EE6C2A;
+    --bg-main: #070F1E;
+    --bg-card: #0F1D36;
+    --bg-card-hover: #152648;
+    --border-color: #1C3056;
+    --accent-emerald: #00E5A3;
+    --accent-cyan: #06B6D4;
+    --accent-gold: #F59E0B;
   }
   
   html {
@@ -18,26 +17,26 @@
   }
 
   body {
-    background-color: #000000;
-    color: #f5f5f5;
+    background-color: #070F1E;
+    color: #F8FAFC;
     overflow-x: hidden;
   }
 }
 
-/* Custom Scrollbar - Flat & Clean */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: #070F1E;
 }
 ::-webkit-scrollbar-thumb {
-  background: #262626;
+  background: #1C3056;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #404040;
+  background: #06B6D4;
 }
 
 /* Hide scrollbar utility */
@@ -66,4 +65,3 @@
 .animate-marquee:hover {
   animation-play-state: paused;
 }
-
