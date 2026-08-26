@@ -233,143 +233,7 @@ export default function App() {
       {/* ---------------- 1. Horizontal Sliding Image Strip (Top of Page) ---------------- */}
       <SlidingStrip />
 
-      {/* ---------------- 2. Products Catalog Section (Moved Immediately After Sliding Strip) ---------------- */}
-      <section id="products" className="py-6 sm:py-14 px-3 sm:px-8 max-w-7xl mx-auto border-b border-neutral-900">
-        
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-6 mb-5 sm:mb-8">
-          <div>
-            <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">Complete Product Lineup</span>
-            <h2 className="text-xl sm:text-4xl font-black text-white font-['Outfit'] mt-0.5">
-              Explore Our Products ({PRODUCTS.length})
-            </h2>
-            <p className="text-neutral-400 text-[11px] sm:text-sm mt-0.5">
-              Tap "Order" on any card to send a pre-filled WhatsApp inquiry.
-            </p>
-          </div>
-
-          {/* Search Box */}
-          <div className="relative w-full md:w-72">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" size={14} />
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-neutral-900 border border-neutral-800 rounded-xl pl-9 pr-7 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-700"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white"
-              >
-                <X size={13} />
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Category Pills Filter */}
-        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 sm:pb-4 no-scrollbar mb-4 sm:mb-8">
-          {CATEGORIES.map((cat) => {
-            const isSelected = selectedCategory === cat;
-            return (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-[11px] sm:text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-                  isSelected
-                    ? "bg-amber-400 text-black font-extrabold"
-                    : "bg-neutral-900 text-neutral-300 border border-neutral-800 hover:bg-neutral-800 hover:text-white"
-                }`}
-              >
-                {cat}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Product Grid - 2 columns on Mobile, 4 columns on Desktop */}
-        {filteredProducts.length === 0 ? (
-          <div className="bg-neutral-900 rounded-xl p-6 sm:p-12 text-center my-6 max-w-md mx-auto border border-neutral-800">
-            <Search size={28} className="mx-auto text-neutral-600 mb-2" />
-            <h3 className="text-xs sm:text-base font-bold text-white">No products found</h3>
-            <p className="text-[11px] sm:text-xs text-neutral-400 mt-1">Try adjusting your search keywords.</p>
-            <button
-              onClick={() => { setSelectedCategory("All"); setSearchQuery(""); }}
-              className="mt-3 bg-neutral-800 hover:bg-neutral-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg cursor-pointer"
-            >
-              Reset Filters
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-6">
-            {filteredProducts.map((p) => (
-              <article
-                key={p.id}
-                className="bg-neutral-900 rounded-lg sm:rounded-2xl overflow-hidden border border-neutral-800 flex flex-col hover:border-neutral-700 transition-all duration-300 group"
-              >
-                {/* Product Image Container */}
-                <div className="relative aspect-[4/3] sm:aspect-square overflow-hidden bg-neutral-950">
-                  <img
-                    src={p.img}
-                    alt={p.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  <div className="absolute top-1.5 left-1.5 sm:top-3 sm:left-3">
-                    <span className="bg-black/90 border border-neutral-800 text-amber-400 text-[8px] sm:text-[10px] font-extrabold px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded uppercase tracking-wider">
-                      {p.tag}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Product Card Details */}
-                <div className="p-2.5 sm:p-5 flex flex-col flex-1">
-                  <div className="flex items-center justify-between text-[9px] sm:text-[11px] text-neutral-400 mb-0.5 sm:mb-1">
-                    <span className="font-semibold text-neutral-400 truncate max-w-[70px] sm:max-w-[90px]">{p.category}</span>
-                    <div className="flex items-center gap-0.5 text-amber-400">
-                      <Star size={10} fill="currentColor" />
-                      <span className="font-bold">{p.rating}</span>
-                    </div>
-                  </div>
-
-                  {/* Product Title */}
-                  <h3 className="text-xs sm:text-base font-extrabold text-white leading-tight sm:leading-snug line-clamp-2 min-h-[1.8rem] sm:min-h-[2.5rem]">
-                    {p.name}
-                  </h3>
-                  
-                  {/* Product Description */}
-                  <p className="hidden sm:block text-xs text-neutral-400 mt-1.5 line-clamp-2 flex-1 leading-relaxed">
-                    {p.desc}
-                  </p>
-
-                  {/* Price & Order Action */}
-                  <div className="mt-2 sm:mt-4 pt-2 sm:pt-3 border-t border-neutral-800 flex items-center justify-between gap-1.5">
-                    <div>
-                      <span className="text-[7px] sm:text-[10px] uppercase font-bold text-neutral-500 block leading-none">Price</span>
-                      <span className="text-xs sm:text-lg font-black text-amber-400 font-['Outfit'] price">{p.price}</span>
-                    </div>
-
-                    <a
-                      href={waLink(`Hello BE-Clean, I am interested in purchasing ${p.name} priced at ${p.price}.`)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center justify-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[9px] sm:text-xs font-bold uppercase tracking-wider px-2 py-1.5 sm:px-3.5 sm:py-2.5 rounded-md sm:rounded-lg transition-colors"
-                    >
-                      <MessageCircle size={12} /> Order
-                    </a>
-                  </div>
-
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
-
-      </section>
-
-      {/* ---------------- 3. Hero Section (Pushed Below Products Catalog) ---------------- */}
+      {/* ---------------- 2. Hero Section (Moved Below Sliding Strip) ---------------- */}
       <section id="top" className="relative pt-8 pb-12 sm:pt-16 sm:pb-20 px-3 sm:px-8 max-w-7xl mx-auto border-b border-neutral-900">
         <div className="grid lg:grid-cols-12 gap-6 sm:gap-10 items-center">
           
@@ -534,6 +398,142 @@ export default function App() {
           </div>
 
         </div>
+      </section>
+
+      {/* ---------------- 3. Products Catalog Section (Moved Immediately After Hero Section) ---------------- */}
+      <section id="products" className="py-6 sm:py-14 px-3 sm:px-8 max-w-7xl mx-auto border-b border-neutral-900">
+        
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-6 mb-5 sm:mb-8">
+          <div>
+            <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">Complete Product Lineup</span>
+            <h2 className="text-xl sm:text-4xl font-black text-white font-['Outfit'] mt-0.5">
+              Explore Our Products ({PRODUCTS.length})
+            </h2>
+            <p className="text-neutral-400 text-[11px] sm:text-sm mt-0.5">
+              Tap "Order" on any card to send a pre-filled WhatsApp inquiry.
+            </p>
+          </div>
+
+          {/* Search Box */}
+          <div className="relative w-full md:w-72">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" size={14} />
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-neutral-900 border border-neutral-800 rounded-xl pl-9 pr-7 py-2 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-700"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white"
+              >
+                <X size={13} />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Category Pills Filter */}
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 sm:pb-4 no-scrollbar mb-4 sm:mb-8">
+          {CATEGORIES.map((cat) => {
+            const isSelected = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-[11px] sm:text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
+                  isSelected
+                    ? "bg-amber-400 text-black font-extrabold"
+                    : "bg-neutral-900 text-neutral-300 border border-neutral-800 hover:bg-neutral-800 hover:text-white"
+                }`}
+              >
+                {cat}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Product Grid - 2 columns on Mobile, 4 columns on Desktop */}
+        {filteredProducts.length === 0 ? (
+          <div className="bg-neutral-900 rounded-xl p-6 sm:p-12 text-center my-6 max-w-md mx-auto border border-neutral-800">
+            <Search size={28} className="mx-auto text-neutral-600 mb-2" />
+            <h3 className="text-xs sm:text-base font-bold text-white">No products found</h3>
+            <p className="text-[11px] sm:text-xs text-neutral-400 mt-1">Try adjusting your search keywords.</p>
+            <button
+              onClick={() => { setSelectedCategory("All"); setSearchQuery(""); }}
+              className="mt-3 bg-neutral-800 hover:bg-neutral-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg cursor-pointer"
+            >
+              Reset Filters
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-6">
+            {filteredProducts.map((p) => (
+              <article
+                key={p.id}
+                className="bg-neutral-900 rounded-lg sm:rounded-2xl overflow-hidden border border-neutral-800 flex flex-col hover:border-neutral-700 transition-all duration-300 group"
+              >
+                {/* Product Image Container */}
+                <div className="relative aspect-[4/3] sm:aspect-square overflow-hidden bg-neutral-950">
+                  <img
+                    src={p.img}
+                    alt={p.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  <div className="absolute top-1.5 left-1.5 sm:top-3 sm:left-3">
+                    <span className="bg-black/90 border border-neutral-800 text-amber-400 text-[8px] sm:text-[10px] font-extrabold px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded uppercase tracking-wider">
+                      {p.tag}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Product Card Details */}
+                <div className="p-2.5 sm:p-5 flex flex-col flex-1">
+                  <div className="flex items-center justify-between text-[9px] sm:text-[11px] text-neutral-400 mb-0.5 sm:mb-1">
+                    <span className="font-semibold text-neutral-400 truncate max-w-[70px] sm:max-w-[90px]">{p.category}</span>
+                    <div className="flex items-center gap-0.5 text-amber-400">
+                      <Star size={10} fill="currentColor" />
+                      <span className="font-bold">{p.rating}</span>
+                    </div>
+                  </div>
+
+                  {/* Product Title */}
+                  <h3 className="text-xs sm:text-base font-extrabold text-white leading-tight sm:leading-snug line-clamp-2 min-h-[1.8rem] sm:min-h-[2.5rem]">
+                    {p.name}
+                  </h3>
+                  
+                  {/* Product Description */}
+                  <p className="hidden sm:block text-xs text-neutral-400 mt-1.5 line-clamp-2 flex-1 leading-relaxed">
+                    {p.desc}
+                  </p>
+
+                  {/* Price & Order Action */}
+                  <div className="mt-2 sm:mt-4 pt-2 sm:pt-3 border-t border-neutral-800 flex items-center justify-between gap-1.5">
+                    <div>
+                      <span className="text-[7px] sm:text-[10px] uppercase font-bold text-neutral-500 block leading-none">Price</span>
+                      <span className="text-xs sm:text-lg font-black text-amber-400 font-['Outfit'] price">{p.price}</span>
+                    </div>
+
+                    <a
+                      href={waLink(`Hello BE-Clean, I am interested in purchasing ${p.name} priced at ${p.price}.`)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center justify-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[9px] sm:text-xs font-bold uppercase tracking-wider px-2 py-1.5 sm:px-3.5 sm:py-2.5 rounded-md sm:rounded-lg transition-colors"
+                    >
+                      <MessageCircle size={12} /> Order
+                    </a>
+                  </div>
+
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+
       </section>
 
       {/* ---------------- "How Can We Help You?" Cards ---------------- */}
