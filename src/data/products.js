@@ -1,0 +1,545 @@
+/* ------------------------------------------------------------------
+   BE-CLEAN — Official Product Dataset (42 Items)
+   All images are loaded from /images/products/
+   Prices can be edited directly here.
+------------------------------------------------------------------ */
+export const PRODUCTS = [
+  {
+    id: 1,
+    name: "Sweep 400ml",
+    category: "Toilet",
+    desc: "Active toilet cleaning gel formula for stain removal and germ protection.",
+    price: "Rs. 100",
+    tag: "Compact Pack",
+    rating: 4.8,
+    reviews: 95,
+    img: "/images/products/sweeplitermediumbottle.jpeg"
+  },
+  {
+    id: 2,
+    name: "Sweep 600ml",
+    category: "Toilet",
+    desc: "Heavy-duty toilet gel that cuts hard-water mineral deposits.",
+    price: "Rs. 180",
+    tag: "Top Seller",
+    rating: 4.9,
+    reviews: 142,
+    img: "/images/products/sweep 600mlchotibottle.jpeg"
+  },
+  {
+    id: 3,
+    name: "Sweep litre",
+    category: "Toilet",
+    desc: "1 Litre hospital-grade toilet cleaner for long-lasting freshness.",
+    price: "Rs. 220",
+    tag: "Family Pack",
+    rating: 5.0,
+    reviews: 188,
+    img: "/images/products/sweeplitr.jpeg"
+  },
+  {
+    id: 4,
+    name: "Sweep 1300ml",
+    category: "Toilet",
+    desc: "Jumbo 1.3L extra-strength toilet bowl cleaner.",
+    price: "Rs. 320",
+    tag: "Jumbo Value",
+    rating: 4.9,
+    reviews: 215,
+    img: "/images/products/sweep1300mlsabsybari.jpeg"
+  },
+  {
+    id: 5,
+    name: "Phynl 2.75",
+    category: "Floor",
+    desc: "2.75 Litre commercial floor disinfectant phenyl.",
+    price: "Rs. 350",
+    tag: "Commercial Can",
+    rating: 4.8,
+    reviews: 110,
+    img: "/images/products/simplephynel_bigbottle.jpeg"
+  },
+  {
+    id: 6,
+    name: "Phynl litre",
+    category: "Floor",
+    desc: "1 Litre pine-scented surface phenyl for daily floor mopping.",
+    price: "Rs. 150",
+    tag: "Daily Fresh",
+    rating: 4.7,
+    reviews: 92,
+    img: "/images/products/simplephenylsmall.jpeg"
+  },
+  {
+    id: 7,
+    name: "Dettol 2.75",
+    category: "Disinfection",
+    desc: "2.75 Litre antiseptic disinfectant liquid concentrate.",
+    price: "Rs. 450",
+    tag: "Bulk Protect",
+    rating: 5.0,
+    reviews: 176,
+    img: "/images/products/dettolphenyl_bigbottle.jpeg"
+  },
+  {
+    id: 8,
+    name: "Dettol litre",
+    category: "Disinfection",
+    desc: "1 Litre hospital disinfectant cleaner with fresh fragrance.",
+    price: "Rs. 180",
+    tag: "Hospital Grade",
+    rating: 4.9,
+    reviews: 130,
+    img: "/images/products/dettolphenyl_liter_chotibottle.jpeg"
+  },
+  {
+    id: 9,
+    name: "Depex 250ml",
+    category: "Bathroom",
+    desc: "Fast-acting multi-purpose washroom cleaning gel.",
+    price: "Rs. 180",
+    tag: "Active Clean",
+    rating: 4.6,
+    reviews: 64,
+    img: "/images/products/bathroomcleanersmallbottle.jpeg"
+  },
+  {
+    id: 10,
+    name: "Depex 500ml",
+    category: "Bathroom",
+    desc: "500ml deep stain washroom cleaner gel.",
+    price: "Rs. 350",
+    tag: "Deep Power",
+    rating: 4.8,
+    reviews: 87,
+    img: "/images/products/bathroomcleanersmallbottle.jpeg"
+  },
+  {
+    id: 11,
+    name: "Depex 750ml",
+    category: "Bathroom",
+    desc: "750ml heavy-duty bathroom disinfectant & stain remover.",
+    price: "Rs. 500",
+    tag: "Max Value",
+    rating: 4.9,
+    reviews: 104,
+    img: "/images/products/bathroomcleanersmallbottle.jpeg"
+  },
+  {
+    id: 12,
+    name: "Bleach 300ml",
+    category: "Disinfection",
+    desc: "300ml concentrated stain bleach for tiles and white laundry.",
+    price: "Rs. 120",
+    tag: "Stain Remover",
+    rating: 4.7,
+    reviews: 78,
+    img: "/images/products/bleach_sb sy choti bottle (3).jpeg"
+  },
+  {
+    id: 13,
+    name: "Bleach 500ml",
+    category: "Disinfection",
+    desc: "500ml multi-surface active bleach disinfectant.",
+    price: "Rs. 280",
+    tag: "Extra White",
+    rating: 4.8,
+    reviews: 96,
+    img: "/images/products/bleachlargebottle.jpeg"
+  },
+  {
+    id: 14,
+    name: "Bleach litre",
+    category: "Disinfection",
+    desc: "1 Litre heavy sanitizing bleach concentrate.",
+    price: "Rs. 400",
+    tag: "Litre Value",
+    rating: 4.9,
+    reviews: 120,
+    img: "/images/products/bleachliterbottle.jpeg"
+  },
+  {
+    id: 15,
+    name: "Color bleach 500ml",
+    category: "Disinfection",
+    desc: "500ml color-safe oxygen bleach for fabrics & upholstery.",
+    price: "Rs. 350",
+    tag: "Color Safe",
+    rating: 4.8,
+    reviews: 84,
+    img: "/images/products/colorbleach_bigbottle.jpeg"
+  },
+  {
+    id: 16,
+    name: "Color bleach litre",
+    category: "Disinfection",
+    desc: "1 Litre fabric brightener & active color stain shield.",
+    price: "Rs. 500",
+    tag: "Fabric Care",
+    rating: 4.9,
+    reviews: 112,
+    img: "/images/products/colorbleach_bigbottle.jpeg"
+  },
+  {
+    id: 17,
+    name: "Tile 600ml",
+    category: "Bathroom",
+    desc: "600ml bathroom tile & tub scum cleaner.",
+    price: "Rs. 120",
+    tag: "Grout Shine",
+    rating: 4.7,
+    reviews: 90,
+    img: "/images/products/tile&tubsink_smallbottle.jpeg"
+  },
+  {
+    id: 18,
+    name: "Tile 1300ml",
+    category: "Bathroom",
+    desc: "1.3L tile & ceramic deep shine restorer.",
+    price: "Rs. 250",
+    tag: "Tile Master",
+    rating: 4.9,
+    reviews: 150,
+    img: "/images/products/tile&tub_bigbottle.jpeg"
+  },
+  {
+    id: 19,
+    name: "Tiger 300ml",
+    category: "Toilet",
+    desc: "300ml active acid bowl stain lifter.",
+    price: "Rs. 50",
+    tag: "Quick Action",
+    rating: 4.6,
+    reviews: 54,
+    img: "/images/products/tehzaabblacktiger.jpeg"
+  },
+  {
+    id: 20,
+    name: "Black tiger 600ml",
+    category: "Toilet",
+    desc: "600ml ultra-acid heavy toilet stain cleaner.",
+    price: "Rs. 100",
+    tag: "Ultra Acid Gel",
+    rating: 4.9,
+    reviews: 162,
+    img: "/images/products/tehzaabblacktiger.jpeg"
+  },
+  {
+    id: 21,
+    name: "Tiger litre",
+    category: "Toilet",
+    desc: "1 Litre heavy acid bowl & drain restorer.",
+    price: "Rs. 200",
+    tag: "Power Pack",
+    rating: 4.8,
+    reviews: 135,
+    img: "/images/products/tehzaabblacktiger.jpeg"
+  },
+  {
+    id: 22,
+    name: "Naphthalene 100g",
+    category: "Specialty",
+    desc: "100g moth repellent & washroom freshener balls.",
+    price: "Rs. 100",
+    tag: "Odour Shield",
+    rating: 4.7,
+    reviews: 70,
+    img: "/images/products/napthalene balls 200gm bara packet.jpeg"
+  },
+  {
+    id: 23,
+    name: "Naphthalene 200g",
+    category: "Specialty",
+    desc: "200g jumbo pack naphthalene moth balls.",
+    price: "Rs. 150",
+    tag: "Fresh Protect",
+    rating: 4.8,
+    reviews: 98,
+    img: "/images/products/napthalene balls 200gm bara packet.jpeg"
+  },
+  {
+    id: 24,
+    name: "Blue 75ml",
+    category: "Specialty",
+    desc: "75ml liquid laundry blue for brilliant whites.",
+    price: "Rs. 100",
+    tag: "Bright White",
+    rating: 4.7,
+    reviews: 80,
+    img: "/images/products/neel_smallbottle.jpeg"
+  },
+  {
+    id: 25,
+    name: "Blue 150ml",
+    category: "Specialty",
+    desc: "150ml liquid laundry blue optical brightener.",
+    price: "Rs. 200",
+    tag: "Double Action",
+    rating: 4.8,
+    reviews: 92,
+    img: "/images/products/neel_smallbottle.jpeg"
+  },
+  {
+    id: 26,
+    name: "Blue 300ml",
+    category: "Specialty",
+    desc: "300ml large liquid laundry blue bottle.",
+    price: "Rs. 300",
+    tag: "Max Blue",
+    rating: 4.9,
+    reviews: 110,
+    img: "/images/products/neellargebottle.jpeg"
+  },
+  {
+    id: 27,
+    name: "Dish wash 500ml",
+    category: "Kitchen",
+    desc: "500ml lemon grease-cutting dishwashing gel.",
+    price: "Rs. 250",
+    tag: "Lemon Grease Cut",
+    rating: 4.8,
+    reviews: 140,
+    img: "/images/products/dishwashbig.jpeg"
+  },
+  {
+    id: 28,
+    name: "Dish wash litre",
+    category: "Kitchen",
+    desc: "1 Litre heavy dishwashing gel concentrate.",
+    price: "Rs. 400",
+    tag: "Litre Value",
+    rating: 4.9,
+    reviews: 210,
+    img: "/images/products/dishwashbig.jpeg"
+  },
+  {
+    id: 29,
+    name: "Glass cleaner",
+    category: "Bathroom",
+    desc: "Streak-free glass, window, and mirror polish spray.",
+    price: "Rs. 400",
+    tag: "Streak Free",
+    rating: 4.9,
+    reviews: 165,
+    img: "/images/products/glasscleaner.jpeg"
+  },
+  {
+    id: 30,
+    name: "Kitchen cleaner",
+    category: "Kitchen",
+    desc: "Stove grease and counter stain spray.",
+    price: "Rs. 400",
+    tag: "Stove Shield",
+    rating: 4.9,
+    reviews: 155,
+    img: "/images/products/kitchencleanerbottle.jpeg"
+  },
+  {
+    id: 31,
+    name: "Insect powder",
+    category: "Specialty",
+    desc: "Fast insect control powder for home and kitchen protection.",
+    price: "Rs. 150",
+    tag: "Pest Off",
+    rating: 4.6,
+    reviews: 82,
+    img: "/images/products/insectpowder.jpeg"
+  },
+  {
+    id: 32,
+    name: "Furniture polish",
+    category: "Specialty",
+    desc: "Protective wood furniture polish and restorer spray.",
+    price: "Rs. 600",
+    tag: "Wood Shine",
+    rating: 4.8,
+    reviews: 94,
+    img: "/images/products/furniturepolish.jpeg"
+  },
+  {
+    id: 33,
+    name: "Dashboard polish",
+    category: "Specialty",
+    desc: "Car interior dashboard polish and vinyl conditioner.",
+    price: "Rs. 500",
+    tag: "Auto Gloss",
+    rating: 4.9,
+    reviews: 125,
+    img: "/images/products/dashboard_polish.jpeg"
+  },
+  {
+    id: 34,
+    name: "Car shampoo 500ml",
+    category: "Specialty",
+    desc: "500ml high-foaming vehicle wash shampoo.",
+    price: "Rs. 400",
+    tag: "Foam Shield",
+    rating: 4.8,
+    reviews: 90,
+    img: "/images/products/carshampo_smallbottle.jpeg"
+  },
+  {
+    id: 35,
+    name: "Car shampoo litre",
+    category: "Specialty",
+    desc: "1 Litre pro-grade car wash shampoo.",
+    price: "Rs. 700",
+    tag: "Pro Auto Shine",
+    rating: 5.0,
+    reviews: 145,
+    img: "/images/products/carshampobaribottle.jpeg"
+  },
+  {
+    id: 36,
+    name: "Spiral small",
+    category: "Kitchen",
+    desc: "Compact stainless steel kitchen wire scrubber.",
+    price: "Rs. 50",
+    tag: "Steel Scrubber",
+    rating: 4.7,
+    reviews: 60,
+    img: "/images/products/chotibartantaar.jpeg"
+  },
+  {
+    id: 37,
+    name: "Spiral large",
+    category: "Kitchen",
+    desc: "Jumbo heavy-duty dish scrubbing wire.",
+    price: "Rs. 100",
+    tag: "Jumbo Scrubber",
+    rating: 4.8,
+    reviews: 88,
+    img: "/images/products/bartanwalitar_jumbo.jpeg"
+  },
+  {
+    id: 38,
+    name: "Sponge chotu",
+    category: "Kitchen",
+    desc: "Small dishwashing sponge for delicate glassware.",
+    price: "Rs. 70",
+    tag: "Mini Scrub",
+    rating: 4.6,
+    reviews: 45,
+    img: "/images/products/nailsaver.jpeg"
+  },
+  {
+    id: 39,
+    name: "Sponge regular",
+    category: "Kitchen",
+    desc: "Standard dual-sided kitchen cleaning sponge.",
+    price: "Rs. 80",
+    tag: "Soft Foam",
+    rating: 4.7,
+    reviews: 65,
+    img: "/images/products/nailsaver.jpeg"
+  },
+  {
+    id: 40,
+    name: "Sponge nailsaver",
+    category: "Kitchen",
+    desc: "Ergonomic fingernail protection scrub sponge.",
+    price: "Rs. 100",
+    tag: "Grip Protect",
+    rating: 4.9,
+    reviews: 115,
+    img: "/images/products/nailsaver.jpeg"
+  },
+  {
+    id: 41,
+    name: "Microfiber cloth",
+    category: "Specialty",
+    desc: "Ultra-soft absorbent multi-surface cleaning cloth.",
+    price: "Rs. 500",
+    tag: "Ultra Absorbent",
+    rating: 4.9,
+    reviews: 160,
+    img: "/images/products/microfibercloth.jpeg"
+  },
+  {
+    id: 42,
+    name: "Car cloth",
+    category: "Specialty",
+    desc: "Lint-free car drying and detailing cloth.",
+    price: "Rs. 500",
+    tag: "Lint Free",
+    rating: 4.9,
+    reviews: 152,
+    img: "/images/products/microfibercloth.jpeg"
+  },
+  {
+    id: 43,
+    name: "Carpet & Rug Cleaner 500ml",
+    category: "Specialty",
+    desc: "Deep foam spot cleaner and fabric refresher for carpets and rugs.",
+    price: "Rs. 350",
+    tag: "Fiber Care",
+    rating: 4.8,
+    reviews: 72,
+    img: "/images/products/carpet&rug_small bottle.jpeg"
+  },
+  {
+    id: 44,
+    name: "Carpet & Rug Cleaner Litre",
+    category: "Specialty",
+    desc: "1 Litre heavy stain shampoo for home and vehicle carpets.",
+    price: "Rs. 650",
+    tag: "Deep Foam",
+    rating: 4.9,
+    reviews: 95,
+    img: "/images/products/carpet&rugbigbittle.jpeg"
+  },
+  {
+    id: 45,
+    name: "Marble & Granite Shine Litre",
+    category: "Floor",
+    desc: "1 Litre natural shine restorer for marble and granite floors.",
+    price: "Rs. 550",
+    tag: "Stone Protect",
+    rating: 4.9,
+    reviews: 110,
+    img: "/images/products/marble_bigbottle.jpeg"
+  },
+  {
+    id: 46,
+    name: "Heavy Kitchen Degreaser Litre",
+    category: "Kitchen",
+    desc: "Commercial strength kitchen grease & oil cutting concentrate.",
+    price: "Rs. 600",
+    tag: "Chef Choice",
+    rating: 5.0,
+    reviews: 140,
+    img: "/images/products/kithengrease_bigbottle.jpeg"
+  },
+  {
+    id: 47,
+    name: "Washroom Cleaner Gel Big (Harbic)",
+    category: "Toilet",
+    desc: "Big jumbo bottle active washroom & ceramic bowl stain remover.",
+    price: "Rs. 350",
+    tag: "Ultra Power",
+    rating: 4.9,
+    reviews: 128,
+    img: "/images/products/harbic_bigbottle.jpeg"
+  },
+  {
+    id: 48,
+    name: "Washroom Cleaner Gel Medium (Harbic)",
+    category: "Toilet",
+    desc: "Medium bottle active washroom & toilet bowl stain remover.",
+    price: "Rs. 250",
+    tag: "Active Clean",
+    rating: 4.8,
+    reviews: 110,
+    img: "/images/products/harbic_mediumbottle.jpeg"
+  }
+];
+
+export const CATEGORIES = [
+  "All",
+  "Toilet",
+  "Bathroom",
+  "Floor",
+  "Kitchen",
+  "Disinfection",
+  "Specialty"
+];
