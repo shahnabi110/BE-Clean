@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { PRODUCTS, CATEGORIES } from "./data/products";
 import SlidingStrip from "./components/SlidingStrip";
+import LoadingScreen from "./components/LoadingScreen";
 
 /* ------------------------------------------------------------------
    BE-CLEAN — Verified Customer Reviews
@@ -85,6 +86,7 @@ const waLink = (text) => `https://wa.me/${PHONE}?text=${encodeURIComponent(text)
 const RETAIL_PARTNER_WA_LINK = `https://wa.me/${PHONE}?text=${encodeURIComponent("Hello BE-Clean, I'd like to become a retail partner and place a bulk order.")}`;
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
@@ -135,7 +137,9 @@ export default function App() {
   const activeItem = spotlightItems[activeSpotlight].prod;
 
   return (
-    <div className="min-h-screen bg-black text-neutral-100 font-['Plus_Jakarta_Sans',sans-serif] selection:bg-neutral-800 selection:text-white overflow-x-hidden">
+    <>
+      {isLoading && <LoadingScreen onFinish={() => setIsLoading(false)} />}
+      <div className="min-h-screen bg-black text-neutral-100 font-['Plus_Jakarta_Sans',sans-serif] selection:bg-neutral-800 selection:text-white overflow-x-hidden">
       
       {/* ---------------- Top Announcement Bar ---------------- */}
       <div className="bg-neutral-900 border-b border-neutral-800 text-[11px] sm:text-xs py-2 px-3 sm:px-4 text-center text-neutral-300 font-medium flex items-center justify-center gap-1.5 sm:gap-3 flex-wrap">
@@ -849,5 +853,6 @@ export default function App() {
       </a>
 
     </div>
+    </>
   );
 }
