@@ -137,10 +137,10 @@ export default function App() {
 
         {/* ── Header ── */}
         <header className="sticky top-0 z-40 bg-[#070F1E]/96 border-b border-[#131F36] backdrop-blur-md">
-          <div className="max-w-7xl mx-auto px-3 sm:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
+          <div className="max-w-7xl mx-auto px-3 sm:px-8 h-20 sm:h-28 flex items-center justify-between gap-4">
 
             <a href="#products" className="flex-shrink-0">
-              <img src="/logo.png" alt="BE-Clean Pakistan" className="h-10 sm:h-14 w-auto object-contain max-w-[160px] sm:max-w-[270px]" />
+              <img src="/logo.png" alt="BE-Clean Pakistan" className="h-14 sm:h-22 lg:h-24 w-auto object-contain max-w-[220px] sm:max-w-[380px]" />
             </a>
 
             <nav className="hidden md:flex items-center gap-7 text-[11px] font-bold uppercase tracking-wider text-slate-500">
@@ -746,7 +746,7 @@ export default function App() {
           <div className="max-w-7xl mx-auto px-3 sm:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
 
             <div className="space-y-3">
-              <img src="/logo.png" alt="BE-Clean" className="h-10 sm:h-16 w-auto object-contain" />
+              <img src="/logo.png" alt="BE-Clean" className="h-16 sm:h-24 w-auto object-contain" />
               <p className="text-amber-400 font-black text-[10px] uppercase tracking-wider">BE PAKISTANI, BUY PAKISTANI</p>
               <p className="text-slate-500 text-[11px] max-w-xs leading-relaxed">
                 Manufacturing premium cleaning products in Rawalpindi since 2016. Serving homes and businesses across Rawalpindi &amp; Islamabad.

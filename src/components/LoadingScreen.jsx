@@ -33,7 +33,7 @@ export default function LoadingScreen({ onFinish }) {
         <img
           src="/logo.png"
           alt="BE-Clean"
-          className="h-20 sm:h-28 w-auto object-contain"
+          className="h-36 sm:h-52 w-auto object-contain"
         />
 
         {/* Brand identity lines */}
