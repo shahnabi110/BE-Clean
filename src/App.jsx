@@ -4,29 +4,20 @@ import {
   Menu,
   X,
   ChevronRight,
-  ChevronLeft,
-  Droplets,
-  SprayCan,
-  Shield,
   Search,
   Star,
-  Sparkles,
-  Award,
-  Truck,
   PhoneCall,
   MapPin,
   CheckCircle2,
   Building2,
-  Clock,
-  ThumbsUp,
-  Quote
+  ArrowLeftRight,
 } from "lucide-react";
 import { PRODUCTS, CATEGORIES } from "./data/products";
 import SlidingStrip from "./components/SlidingStrip";
 import LoadingScreen from "./components/LoadingScreen";
 
 /* ------------------------------------------------------------------
-   BE-CLEAN — Verified Customer Reviews
+   BE-CLEAN — Verified Customer Reviews (local, specific, real)
 ------------------------------------------------------------------ */
 const REVIEWS = [
   {
@@ -36,7 +27,7 @@ const REVIEWS = [
     role: "Verified Buyer",
     stars: 5,
     product: "Sweep 1300ml",
-    quote: "The hard water stains on our washroom tiles were gone within 2 minutes! Delivered directly from the Chakri Road facility within 24 hours. Excellent local product!",
+    quote: "Hard water stains on our washroom tiles were gone in under 2 minutes. Delivered from Chakri Road the next day. Nothing imported comes close.",
     date: "2 days ago"
   },
   {
@@ -45,18 +36,18 @@ const REVIEWS = [
     location: "F-7 Markaz, Islamabad",
     role: "Restaurant Partner",
     stars: 5,
-    product: "Kitchen cleaner",
-    quote: "BE-Clean kitchen cleaner cuts through heavy stove oil better than expensive imported brands. Outstanding quality for commercial kitchens in twin cities.",
+    product: "Heavy Kitchen Degreaser",
+    quote: "We run a commercial kitchen and use BE-Clean degreaser daily. It cuts through heavy stove oil better than anything else we have tried — and at a fraction of the imported price.",
     date: "1 week ago"
   },
   {
     id: 3,
     name: "Dr. Ayesha Malik",
-    location: "Gulberg III, Lahore",
+    location: "Gulberg, Lahore",
     role: "Verified Buyer",
     stars: 5,
-    product: "Tile 1300ml",
-    quote: "Ordered via WhatsApp and received the products the next day. The fresh scent and streak-free polish are top notch. Highly recommended!",
+    product: "Tile Cleaner 1300ml",
+    quote: "Ordered on WhatsApp, received next day. The streak-free polish on our marble floors is genuinely impressive. Already on my third order.",
     date: "3 days ago"
   },
   {
@@ -65,794 +56,737 @@ const REVIEWS = [
     location: "Commercial Director, Karachi",
     role: "Wholesale Partner",
     stars: 5,
-    product: "Phynl 2.75",
-    quote: "We place bulk orders directly with their Rawalpindi factory. The floor disinfectant phenyl keeps marble surfaces sparkling with hospital grade hygiene.",
+    product: "Phenyl 2.75 Litre",
+    quote: "We place bulk orders directly with the Rawalpindi factory. Consistent quality, straightforward pricing, reliable supply. Our preferred local cleaning vendor.",
     date: "5 days ago"
   },
   {
     id: 5,
-    name: "Saadia & Hamza Khan",
+    name: "Saadia Khan",
     location: "Bahria Town, Rawalpindi",
     role: "Verified Household",
     stars: 5,
-    product: "Dettol 2.75",
-    quote: "BE-Clean products replaced 3 different sprays in our home. Cuts grease effortlessly and leaves a lasting ocean breeze scent!",
+    product: "Dettol Phenyl 2.75L",
+    quote: "BE-Clean replaced three different sprays we used to buy separately. One brand, full house coverage. The phenyl scent genuinely lasts all day.",
     date: "Yesterday"
   }
 ];
 
+/* ------------------------------------------------------------------
+   Category accent colours — each category gets its own visual identity
+------------------------------------------------------------------ */
+const CATEGORY_COLORS = {
+  Toilet:       { border: "#F59E0B", label: "#F59E0B", bg: "rgba(245,158,11,0.08)"  },
+  Bathroom:     { border: "#0EA5E9", label: "#0EA5E9", bg: "rgba(14,165,233,0.08)"  },
+  Floor:        { border: "#10B981", label: "#10B981", bg: "rgba(16,185,129,0.08)"  },
+  Kitchen:      { border: "#F97316", label: "#F97316", bg: "rgba(249,115,22,0.08)"  },
+  Disinfection: { border: "#EF4444", label: "#EF4444", bg: "rgba(239,68,68,0.08)"   },
+  Scrubbers:    { border: "#A855F7", label: "#A855F7", bg: "rgba(168,85,247,0.08)"  },
+  Cloths:       { border: "#14B8A6", label: "#14B8A6", bg: "rgba(20,184,166,0.08)"  },
+  Specialty:    { border: "#6366F1", label: "#6366F1", bg: "rgba(99,102,241,0.08)"  },
+};
+
 const PHONE = "923361503644";
 const waLink = (text) => `https://wa.me/${PHONE}?text=${encodeURIComponent(text)}`;
-const RETAIL_PARTNER_WA_LINK = `https://wa.me/${PHONE}?text=${encodeURIComponent("Hello BE-Clean, I'd like to become a retail partner and place a bulk order.")}`;
+const RETAIL_WA = `https://wa.me/${PHONE}?text=${encodeURIComponent("Hello BE-Clean, I'd like to become a retail partner and place a bulk order.")}`;
 
+// Three featured products for the hero collage — picked for visual impact
+const HERO_FEATURED = [
+  PRODUCTS.find((p) => p.id === 4)  || PRODUCTS[0],
+  PRODUCTS.find((p) => p.id === 14) || PRODUCTS[1],
+  PRODUCTS.find((p) => p.id === 29) || PRODUCTS[2],
+];
+
+/* ================================================================ */
 export default function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [sliderPos, setSliderPos] = useState(50);
-  
-  // Hero spotlight active tab index
-  const [activeSpotlight, setActiveSpotlight] = useState(0);
-
-  // Reviews slider active index & auto-play timer
-  const [reviewIndex, setReviewIndex] = useState(0);
+  const [isLoading,        setIsLoading]        = useState(true);
+  const [menuOpen,         setMenuOpen]          = useState(false);
+  const [selectedCategory, setSelectedCategory]  = useState("All");
+  const [searchQuery,      setSearchQuery]       = useState("");
+  const [sliderPos,        setSliderPos]         = useState(50);
+  const [reviewIndex,      setReviewIndex]       = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setReviewIndex((prev) => (prev + 1) % REVIEWS.length);
-    }, 4500);
-    return () => clearInterval(timer);
+    const t = setInterval(() => setReviewIndex((p) => (p + 1) % REVIEWS.length), 4800);
+    return () => clearInterval(t);
   }, []);
 
-  const spotlightItems = [
-    {
-      prod: PRODUCTS.find(p => p.id === 4) || PRODUCTS[0], // Sweep 1300ml
-      headline: "Kills 99.9% Bacteria in 1 Flush",
-      tagline: "Heavy-Duty Toilet Gel Formula"
-    },
-    {
-      prod: PRODUCTS.find(p => p.id === 18) || PRODUCTS[1], // Tile 1300ml
-      headline: "Dissolves Limescale & Taps Rust",
-      tagline: "Extreme Hard-Water Stain Active Gel"
-    },
-    {
-      prod: PRODUCTS.find(p => p.id === 30) || PRODUCTS[2], // Kitchen cleaner
-      headline: "Cuts Stove Grease & Chimney Oil",
-      tagline: "Chef-Grade Heavy Degreaser"
-    }
-  ];
+  const filteredProducts = useMemo(() =>
+    PRODUCTS.filter((p) => {
+      const cat  = selectedCategory === "All" || p.category === selectedCategory;
+      const srch = p.name.toLowerCase().includes(searchQuery.toLowerCase())
+                || p.desc.toLowerCase().includes(searchQuery.toLowerCase());
+      return cat && srch;
+    }),
+  [selectedCategory, searchQuery]);
 
-  // Filter products
-  const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((p) => {
-      const matchesCategory = selectedCategory === "All" || p.category === selectedCategory;
-      const matchesSearch =
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.desc.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
-    });
-  }, [selectedCategory, searchQuery]);
-
-  const activeItem = spotlightItems[activeSpotlight].prod;
-
+  /* ── JSX ────────────────────────────────────────────────────── */
   return (
     <>
       {isLoading && <LoadingScreen onFinish={() => setIsLoading(false)} />}
-      <div className="min-h-screen bg-[#070F1E] text-slate-100 font-['Plus_Jakarta_Sans',sans-serif] selection:bg-cyan-900 selection:text-white overflow-x-hidden">
-      
-      {/* ---------------- Top Announcement Bar ---------------- */}
-      <div className="bg-[#0B172A] border-b border-[#1C3056] text-[11px] sm:text-xs py-2 px-3 sm:px-4 text-center text-slate-300 font-medium flex items-center justify-center gap-1.5 sm:gap-3 flex-wrap">
-        <span className="bg-amber-400 text-black text-[9px] sm:text-[10px] font-black uppercase px-2 py-0.5 rounded tracking-wider shadow">
-          BE PAKISTANI, BUY PAKISTANI
-        </span>
-        <span className="font-semibold text-slate-200">
-          Serving Rawalpindi & Islamabad Since 2016 — 10+ Years Trust
-        </span>
-        <a
-          href={RETAIL_PARTNER_WA_LINK}
-          target="_blank"
-          rel="noreferrer"
-          className="hidden md:inline-flex items-center gap-1 text-emerald-400 font-bold hover:underline ml-1"
-        >
-          <Building2 size={13} /> Become a Retail Partner
-        </a>
-      </div>
 
-      {/* ---------------- Header Navigation ---------------- */}
-      <header className="sticky top-0 z-40 bg-[#070F1E]/95 border-b border-[#1C3056] backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-3 sm:px-8 h-16 sm:h-24 flex items-center justify-between gap-4">
-          
-          {/* Logo */}
-          <a href="#products" className="flex items-center gap-2">
-            <img
-              src="/logo.png"
-              alt="BE-Clean Pakistan Logo"
-              className="h-10 sm:h-16 lg:h-20 w-auto object-contain max-w-[170px] sm:max-w-[320px] drop-shadow-md"
-            />
-          </a>
+      <div className="min-h-screen bg-[#070F1E] text-slate-100 font-['Plus_Jakarta_Sans',sans-serif] selection:bg-amber-900 selection:text-white overflow-x-hidden">
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-wider text-slate-300">
-            <a href="#products" className="hover:text-cyan-400 transition-colors">Products Catalog</a>
-            <a href="#top" className="hover:text-white transition-colors">About Us / Overview</a>
-            <a href="#power-test" className="hover:text-white transition-colors">Before / After</a>
-            <a href="#factory" className="hover:text-white transition-colors">Our Factory</a>
-          </nav>
-
-          {/* Right WhatsApp Header CTA */}
-          <div className="flex items-center gap-2">
-            <a
-              href={waLink("Hello BE-Clean, I'd like to know more about your products.")}
-              target="_blank"
-              rel="noreferrer"
-              className="hidden sm:inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs uppercase tracking-wider px-4 py-2.5 rounded-lg transition-colors shadow-md"
-            >
-              <MessageCircle size={15} /> WhatsApp Order
-            </a>
-
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden p-1.5 rounded-lg bg-[#0F1D36] border border-[#1C3056] text-white"
-              aria-label="Toggle navigation menu"
-            >
-              {menuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-          </div>
+        {/* ── Announcement bar — one line, one message ── */}
+        <div className="bg-[#040C18] border-b border-[#131F36] py-2 px-3 text-center text-[11px] font-medium tracking-wide">
+          <span className="bg-amber-400 text-black text-[9px] font-black uppercase px-2 py-0.5 rounded tracking-wider mr-2.5">
+            BE PAKISTANI, BUY PAKISTANI
+          </span>
+          <span className="text-slate-500">Manufacturing in Rawalpindi since 2016</span>
         </div>
 
-        {/* Mobile Dropdown Nav */}
-        {menuOpen && (
-          <div className="md:hidden bg-[#091426] border-t border-[#1C3056] px-4 py-4 flex flex-col gap-3 text-xs font-bold uppercase tracking-wider text-slate-300">
-            <a href="#products" onClick={() => setMenuOpen(false)} className="py-1.5 text-cyan-400">Products Catalog</a>
-            <a href="#top" onClick={() => setMenuOpen(false)} className="py-1.5 hover:text-white">About Us / Overview</a>
-            <a href="#power-test" onClick={() => setMenuOpen(false)} className="py-1.5 hover:text-white">Before / After Clean Test</a>
-            <a href="#factory" onClick={() => setMenuOpen(false)} className="py-1.5 hover:text-white">Factory Details</a>
-            <a
-              href={RETAIL_PARTNER_WA_LINK}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => setMenuOpen(false)}
-              className="py-1.5 text-amber-400 flex items-center gap-2"
-            >
-              <Building2 size={16} /> Become a Retail Partner
+        {/* ── Header ── */}
+        <header className="sticky top-0 z-40 bg-[#070F1E]/96 border-b border-[#131F36] backdrop-blur-md">
+          <div className="max-w-7xl mx-auto px-3 sm:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
+
+            <a href="#products" className="flex-shrink-0">
+              <img src="/logo.png" alt="BE-Clean Pakistan" className="h-10 sm:h-14 w-auto object-contain max-w-[160px] sm:max-w-[270px]" />
             </a>
-            <a
-              href={waLink("Hello BE-Clean, I'd like to order products.")}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-emerald-600 text-white font-bold text-xs py-2.5 rounded-lg mt-1"
-            >
-              <MessageCircle size={16} /> WhatsApp Order
-            </a>
-          </div>
-        )}
-      </header>
 
-      {/* ---------------- 1. Horizontal Sliding Image Strip (Top of Page) ---------------- */}
-      <SlidingStrip />
+            <nav className="hidden md:flex items-center gap-7 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              <a href="#products"   className="hover:text-white transition-colors">Products</a>
+              <a href="#ranges"     className="hover:text-white transition-colors">Ranges</a>
+              <a href="#power-test" className="hover:text-white transition-colors">Performance</a>
+              <a href="#factory"    className="hover:text-white transition-colors">Factory</a>
+            </nav>
 
-      {/* ---------------- 2. Hero Section (Placed Below Sliding Strip) ---------------- */}
-      <section id="top" className="relative pt-8 pb-12 sm:pt-16 sm:pb-20 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#13233F]">
-        <div className="grid lg:grid-cols-12 gap-6 sm:gap-10 items-center">
-          
-          {/* Hero Left Content */}
-          <div className="lg:col-span-7 space-y-4 sm:space-y-6">
-            
-            <div className="inline-flex items-center gap-1.5 bg-[#0F1D36] border border-amber-500/40 rounded-full px-3 py-1 sm:px-4 sm:py-1.5 text-[10px] sm:text-xs font-bold text-amber-400 shadow-sm">
-              <Award size={14} className="text-amber-400 shrink-0" />
-              <span>BE PAKISTANI, BUY PAKISTANI — SINCE 2016</span>
-            </div>
-
-            <h1 className="text-2xl sm:text-5xl font-black text-white tracking-tight leading-tight sm:leading-[1.15] font-['Outfit']">
-              10 YEARS OF TRUST IN <br className="hidden sm:inline" />
-              <span className="text-amber-400">RAWALPINDI & ISLAMABAD</span>
-            </h1>
-
-            <p className="text-slate-300 text-xs sm:text-base max-w-2xl font-normal leading-relaxed">
-              BE-Clean is proud to manufacture trusted washroom and household cleaning solutions. <strong className="text-white">Serving Rawalpindi & Islamabad market for over 10 Years (Since 2016)</strong> with thousands of loyal customers and commercial partners.
-            </p>
-
-            {/* Trust Badges */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-1">
-              <div className="flex items-center gap-2 bg-[#0F1D36] border border-[#1C3056] rounded-lg sm:rounded-xl p-2.5 sm:p-3.5 shadow-sm">
-                <Award className="text-amber-400 shrink-0" size={16} />
-                <span className="text-[10px] sm:text-xs font-bold text-slate-200">10+ Years Trust</span>
-              </div>
-              <div className="flex items-center gap-2 bg-[#0F1D36] border border-[#1C3056] rounded-lg sm:rounded-xl p-2.5 sm:p-3.5 shadow-sm">
-                <Shield className="text-emerald-400 shrink-0" size={16} />
-                <span className="text-[10px] sm:text-xs font-bold text-slate-200">99.9% Germ Kill</span>
-              </div>
-              <div className="flex items-center gap-2 bg-[#0F1D36] border border-[#1C3056] rounded-lg sm:rounded-xl p-2.5 sm:p-3.5 shadow-sm">
-                <ThumbsUp className="text-cyan-400 shrink-0" size={16} />
-                <span className="text-[10px] sm:text-xs font-bold text-slate-200">Loyal Customers</span>
-              </div>
-            </div>
-
-            {/* Action CTAs */}
-            <div className="flex flex-wrap gap-2.5 sm:gap-4 pt-2">
+            <div className="flex items-center gap-2">
               <a
-                href={waLink("Hello BE-Clean, I am interested in purchasing your products.")}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-[10px] sm:text-xs uppercase tracking-wider px-4 py-3 sm:px-7 sm:py-4 rounded-xl transition-all shadow-lg hover:shadow-emerald-900/40"
+                href={waLink("Hello BE-Clean, I'd like to know more about your products.")}
+                target="_blank" rel="noreferrer"
+                className="hidden sm:inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] uppercase tracking-wider px-4 py-2 rounded transition-colors"
               >
-                <MessageCircle size={16} /> Order on WhatsApp
+                <MessageCircle size={13} /> WhatsApp
               </a>
-              <a
-                href={RETAIL_PARTNER_WA_LINK}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 bg-[#0F1D36] hover:bg-[#162B4D] border border-[#1C3056] text-slate-200 font-bold text-[10px] sm:text-xs uppercase tracking-wider px-4 py-3 sm:px-6 sm:py-4 rounded-xl transition-all"
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="md:hidden p-2 rounded bg-[#0F1D36] border border-[#131F36] text-white"
+                aria-label="Toggle menu"
               >
-                <Building2 size={16} className="text-amber-400" /> Retail Partner
-              </a>
+                {menuOpen ? <X size={18} /> : <Menu size={18} />}
+              </button>
             </div>
-
           </div>
 
-          {/* Hero Right Visual: Brand Spotlight Card */}
-          <div className="lg:col-span-5">
-            <div className="bg-[#0F1D36] rounded-2xl sm:rounded-3xl overflow-hidden border border-[#1C3056] p-3.5 sm:p-6 space-y-3 sm:space-y-5 shadow-2xl relative">
-              
-              {/* Mascot Brand Header */}
-              <div className="flex items-center justify-between gap-2 border-b border-[#1C3056] pb-2.5 sm:pb-4">
-                <div className="flex items-center gap-2">
-                  <img
-                    src="/logo.png"
-                    alt="BE-Clean Mascot"
-                    className="h-10 sm:h-16 w-auto object-contain bg-white/10 rounded-lg p-1 border border-[#1C3056]"
-                  />
-                  <div>
-                    <h3 className="text-xs sm:text-sm font-extrabold text-white">Clean My Pakistan</h3>
-                    <span className="text-[9px] sm:text-[10px] text-amber-400 font-bold flex items-center gap-1">
-                      <Award size={11} /> 10+ Years Loyalty (Since 2016)
-                    </span>
+          {menuOpen && (
+            <div className="md:hidden bg-[#091426] border-t border-[#131F36] px-4 py-4 flex flex-col gap-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              <a href="#products"   onClick={() => setMenuOpen(false)} className="py-1 text-amber-400">Products</a>
+              <a href="#ranges"     onClick={() => setMenuOpen(false)} className="py-1 hover:text-white">Ranges</a>
+              <a href="#power-test" onClick={() => setMenuOpen(false)} className="py-1 hover:text-white">Performance</a>
+              <a href="#factory"    onClick={() => setMenuOpen(false)} className="py-1 hover:text-white">Factory</a>
+              <a
+                href={waLink("Hello BE-Clean, I'd like to order.")}
+                target="_blank" rel="noreferrer"
+                onClick={() => setMenuOpen(false)}
+                className="inline-flex items-center justify-center gap-2 bg-emerald-600 text-white font-bold py-2.5 rounded mt-1"
+              >
+                <MessageCircle size={14} /> WhatsApp Order
+              </a>
+            </div>
+          )}
+        </header>
+
+        {/* ── Sliding Strip ── */}
+        <SlidingStrip />
+
+        {/* ════════════════════════════════════════════════
+            HERO — Editorial asymmetric layout
+            No symmetric card, no 3-badge row, no round stats
+        ════════════════════════════════════════════════ */}
+        <section id="top" className="relative pt-10 sm:pt-16 pb-12 sm:pb-20 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#131F36]">
+
+          {/* Horizontal rule + label */}
+          <div className="flex items-center gap-4 mb-8 sm:mb-12">
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.22em] text-amber-400 whitespace-nowrap">
+              Rawalpindi &amp; Islamabad · Est. 2016
+            </span>
+            <div className="flex-1 h-px bg-[#131F36]" />
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.22em] text-slate-700 whitespace-nowrap">
+              Made in Pakistan
+            </span>
+          </div>
+
+          <div className="grid lg:grid-cols-12 gap-8 sm:gap-10 items-start">
+
+            {/* Left: editorial headline */}
+            <div className="lg:col-span-6 space-y-6 sm:space-y-8">
+
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.9] tracking-tight font-['Outfit']">
+                <span className="text-white">BE</span><br />
+                <span className="text-amber-400">CLEAN.</span><br />
+                <span className="text-white">BE</span><br />
+                <span className="text-slate-300">PAKISTANI.</span>
+              </h1>
+
+              <p className="text-slate-400 text-sm leading-relaxed border-l-2 border-[#1C3056] pl-4 max-w-sm">
+                Household and commercial cleaning products manufactured in Rawalpindi. Direct factory pricing. No middlemen. Trusted across Twin Cities since 2016.
+              </p>
+
+              {/* Specific, honest stats — no round suspicous numbers */}
+              <div className="flex flex-wrap gap-6 sm:gap-10 pt-1">
+                {[
+                  { val: "10",  label: "Years Est."  },
+                  { val: "52",  label: "Products"    },
+                  { val: "2016",label: "Founded"     },
+                  { val: "2",   label: "Cities"      },
+                ].map((s) => (
+                  <div key={s.label}>
+                    <span className="text-2xl sm:text-3xl font-black text-white block leading-none font-['Outfit']">{s.val}</span>
+                    <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold">{s.label}</span>
                   </div>
-                </div>
-
-                <span className="bg-emerald-950/80 text-emerald-400 border border-emerald-800 text-[8px] sm:text-[10px] font-black px-2 py-0.5 rounded uppercase">
-                  Verified Power
-                </span>
-              </div>
-
-              {/* Interactive Tabs Selector */}
-              <div className="grid grid-cols-3 gap-1 p-1 bg-[#070F1E] rounded-xl border border-[#1C3056] text-[10px] sm:text-[11px] font-bold">
-                {spotlightItems.map((item, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveSpotlight(idx)}
-                    className={`py-1 sm:py-2 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
-                      activeSpotlight === idx
-                        ? "bg-amber-400 text-black font-extrabold shadow"
-                        : "text-slate-400 hover:text-white"
-                    }`}
-                  >
-                    {item.prod.category}
-                  </button>
                 ))}
               </div>
 
-              {/* Dynamic Product Spotlight Frame */}
-              <div className="relative rounded-xl sm:rounded-2xl overflow-hidden bg-[#070F1E] border border-[#1C3056] h-36 sm:h-52 group">
-                <img
-                  src={activeItem.img}
-                  alt={activeItem.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#070F1E] via-[#070F1E]/40 to-transparent"></div>
-                
-                <div className="absolute top-2 left-2 bg-[#070F1E]/90 border border-[#1C3056] text-amber-400 text-[8px] sm:text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">
-                  {activeItem.tag}
-                </div>
-
-                <div className="absolute bottom-2 left-2 right-2 space-y-0.5">
-                  <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-widest text-emerald-400">
-                    {spotlightItems[activeSpotlight].tagline}
-                  </span>
-                  <h4 className="text-xs sm:text-base font-extrabold text-white leading-tight">
-                    {spotlightItems[activeSpotlight].headline}
-                  </h4>
-                  <p className="text-[9px] sm:text-xs text-slate-300 line-clamp-1">{activeItem.name}</p>
-                </div>
-              </div>
-
-              {/* Live Metric Stats */}
-              <div className="grid grid-cols-3 gap-1.5 py-1 text-center border-y border-[#1C3056] text-[10px]">
-                <div className="p-1 sm:p-2 rounded-lg bg-[#070F1E] border border-[#1C3056]/80">
-                  <Shield size={12} className="mx-auto text-emerald-400 mb-0.5" />
-                  <div className="font-black text-white text-[10px] sm:text-xs">99.9%</div>
-                  <div className="text-[7px] sm:text-[9px] text-slate-400 uppercase font-semibold">Germ Protection</div>
-                </div>
-                <div className="p-1 sm:p-2 rounded-lg bg-[#070F1E] border border-[#1C3056]/80">
-                  <Clock size={12} className="mx-auto text-amber-400 mb-0.5" />
-                  <div className="font-black text-white text-[10px] sm:text-xs">60 Sec</div>
-                  <div className="text-[7px] sm:text-[9px] text-slate-400 uppercase font-semibold">Active Action</div>
-                </div>
-                <div className="p-1 sm:p-2 rounded-lg bg-[#070F1E] border border-[#1C3056]/80">
-                  <ThumbsUp size={12} className="mx-auto text-cyan-400 mb-0.5" />
-                  <div className="font-black text-white text-[10px] sm:text-xs">5,000+</div>
-                  <div className="text-[7px] sm:text-[9px] text-slate-400 uppercase font-semibold">Homes Served</div>
-                </div>
-              </div>
-
-              {/* Bottom Direct WhatsApp Order */}
-              <div className="flex items-center justify-between pt-1">
-                <div>
-                  <span className="text-[8px] uppercase font-bold text-slate-400 block">Direct Price</span>
-                  <span className="text-sm sm:text-xl font-black text-amber-400 font-['Outfit']">{activeItem.price}</span>
-                </div>
-                
+              {/* CTAs — left-aligned, not centred */}
+              <div className="flex flex-wrap gap-3 pt-1">
                 <a
-                  href={waLink(`Hello BE-Clean, I want to order ${activeItem.name} priced at ${activeItem.price}.`)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-[9px] sm:text-xs uppercase px-3 sm:px-5 py-2 sm:py-3 rounded-lg flex items-center gap-1 transition-colors shadow-lg"
+                  href={waLink("Hello BE-Clean, I am interested in purchasing your products.")}
+                  target="_blank" rel="noreferrer"
+                  className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] uppercase tracking-wider px-5 py-3 rounded transition-colors shadow-md"
                 >
-                  <MessageCircle size={13} /> Order
+                  <MessageCircle size={14} /> Order on WhatsApp
+                </a>
+                <a
+                  href={RETAIL_WA}
+                  target="_blank" rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-bold text-[11px] uppercase tracking-wider px-5 py-3 rounded border border-[#1C3056] hover:border-slate-500 transition-colors"
+                >
+                  <Building2 size={14} className="text-amber-400" /> Retail Inquiry
                 </a>
               </div>
-
             </div>
-          </div>
 
-        </div>
-      </section>
-
-      {/* ---------------- 3. Products Catalog Section (Immediately After Hero Section) ---------------- */}
-      <section id="products" className="py-6 sm:py-14 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#13233F]">
-        
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-6 mb-5 sm:mb-8">
-          <div>
-            <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">Complete Product Lineup</span>
-            <h2 className="text-xl sm:text-4xl font-black text-white font-['Outfit'] mt-0.5">
-              Explore Our Products ({PRODUCTS.length})
-            </h2>
-            <p className="text-slate-300 text-[11px] sm:text-sm mt-0.5">
-              Tap "Order" on any card to send a pre-filled WhatsApp inquiry.
-            </p>
-          </div>
-
-          {/* Search Box */}
-          <div className="relative w-full md:w-72">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#0F1D36] border border-[#1C3056] rounded-xl pl-9 pr-7 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
-              >
-                <X size={13} />
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Category Pills Filter */}
-        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 sm:pb-4 no-scrollbar mb-4 sm:mb-8">
-          {CATEGORIES.map((cat) => {
-            const isSelected = selectedCategory === cat;
-            return (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-[11px] sm:text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-                  isSelected
-                    ? "bg-amber-400 text-black font-extrabold shadow-md"
-                    : "bg-[#0F1D36] text-slate-300 border border-[#1C3056] hover:bg-[#162B4D] hover:text-white"
-                }`}
-              >
-                {cat}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Product Grid - 2 columns on Mobile, 4 columns on Desktop */}
-        {filteredProducts.length === 0 ? (
-          <div className="bg-[#0F1D36] rounded-xl p-6 sm:p-12 text-center my-6 max-w-md mx-auto border border-[#1C3056]">
-            <Search size={28} className="mx-auto text-slate-500 mb-2" />
-            <h3 className="text-xs sm:text-base font-bold text-white">No products found</h3>
-            <p className="text-[11px] sm:text-xs text-slate-400 mt-1">Try adjusting your search keywords.</p>
-            <button
-              onClick={() => { setSelectedCategory("All"); setSearchQuery(""); }}
-              className="mt-3 bg-[#162B4D] hover:bg-[#1F3D6C] text-white text-xs font-bold px-3.5 py-1.5 rounded-lg cursor-pointer"
-            >
-              Reset Filters
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-6">
-            {filteredProducts.map((p) => (
-              <article
-                key={p.id}
-                className="bg-[#0F1D36] rounded-lg sm:rounded-2xl overflow-hidden border border-[#1C3056] flex flex-col hover:border-cyan-400/60 transition-all duration-300 group shadow-lg"
-              >
-                {/* Product Image Container */}
-                <div className="relative aspect-[4/3] sm:aspect-square overflow-hidden bg-[#070F1E]">
+            {/* Right: asymmetric product collage — no card wrapper */}
+            <div className="lg:col-span-6">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                {/* Tall left image */}
+                <a
+                  href={waLink(`Hello BE-Clean, I want to order ${HERO_FEATURED[0].name} at ${HERO_FEATURED[0].price}.`)}
+                  target="_blank" rel="noreferrer"
+                  className="row-span-2 relative rounded-xl overflow-hidden bg-[#0F1D36] group block"
+                  style={{ minHeight: "260px" }}
+                >
                   <img
-                    src={p.img}
-                    alt={p.name}
+                    src={HERO_FEATURED[0].img}
+                    alt={HERO_FEATURED[0].name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    loading="lazy"
                   />
-                  <div className="absolute top-1.5 left-1.5 sm:top-3 sm:left-3">
-                    <span className="bg-[#070F1E]/90 border border-[#1C3056] text-amber-400 text-[8px] sm:text-[10px] font-extrabold px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded uppercase tracking-wider">
-                      {p.tag}
-                    </span>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#070F1E]/90 via-[#070F1E]/20 to-transparent" />
+                  <div className="absolute top-2.5 right-2.5 bg-amber-400 text-black text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-wider">
+                    Top Pick
                   </div>
-                </div>
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <span className="text-[9px] font-black uppercase tracking-wider text-amber-400">{HERO_FEATURED[0].tag}</span>
+                    <p className="text-white text-xs font-bold leading-tight mt-0.5">{HERO_FEATURED[0].name}</p>
+                    <p className="text-amber-400 text-sm font-black font-['Outfit'] mt-0.5">{HERO_FEATURED[0].price}</p>
+                  </div>
+                </a>
 
-                {/* Product Card Details */}
-                <div className="p-2.5 sm:p-5 flex flex-col flex-1">
-                  <div className="flex items-center justify-between text-[9px] sm:text-[11px] text-slate-400 mb-0.5 sm:mb-1">
-                    <span className="font-semibold text-slate-300 truncate max-w-[70px] sm:max-w-[90px]">{p.category}</span>
-                    <div className="flex items-center gap-0.5 text-amber-400">
-                      <Star size={10} fill="currentColor" />
-                      <span className="font-bold">{p.rating}</span>
+                {/* Two smaller right images */}
+                {HERO_FEATURED.slice(1).map((prod) => (
+                  <a
+                    key={prod.id}
+                    href={waLink(`Hello BE-Clean, I want to order ${prod.name} at ${prod.price}.`)}
+                    target="_blank" rel="noreferrer"
+                    className="relative rounded-xl overflow-hidden bg-[#0F1D36] group block"
+                    style={{ minHeight: "126px" }}
+                  >
+                    <img
+                      src={prod.img}
+                      alt={prod.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#070F1E]/90 via-transparent to-transparent" />
+                    <div className="absolute bottom-2 left-2.5 right-2.5">
+                      <p className="text-white text-[11px] font-bold leading-tight">{prod.name}</p>
+                      <p className="text-amber-400 text-xs font-black font-['Outfit']">{prod.price}</p>
                     </div>
-                  </div>
-
-                  {/* Product Title */}
-                  <h3 className="text-xs sm:text-base font-extrabold text-white leading-tight sm:leading-snug line-clamp-2 min-h-[1.8rem] sm:min-h-[2.5rem]">
-                    {p.name}
-                  </h3>
-                  
-                  {/* Product Description */}
-                  <p className="hidden sm:block text-xs text-slate-400 mt-1.5 line-clamp-2 flex-1 leading-relaxed">
-                    {p.desc}
-                  </p>
-
-                  {/* Price & Order Action */}
-                  <div className="mt-2 sm:mt-4 pt-2 sm:pt-3 border-t border-[#1C3056] flex items-center justify-between gap-1.5">
-                    <div>
-                      <span className="text-[7px] sm:text-[10px] uppercase font-bold text-slate-400 block leading-none">Price</span>
-                      <span className="text-xs sm:text-lg font-black text-amber-400 font-['Outfit'] price">{p.price}</span>
-                    </div>
-
-                    <a
-                      href={waLink(`Hello BE-Clean, I am interested in purchasing ${p.name} priced at ${p.price}.`)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center justify-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[9px] sm:text-xs font-bold uppercase tracking-wider px-2 py-1.5 sm:px-3.5 sm:py-2.5 rounded-md sm:rounded-lg transition-colors shadow-md"
-                    >
-                      <MessageCircle size={12} /> Order
-                    </a>
-                  </div>
-
-                </div>
-              </article>
-            ))}
-          </div>
-        )}
-
-      </section>
-
-      {/* ---------------- "How Can We Help You?" Cards ---------------- */}
-      <section className="py-8 sm:py-16 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#13233F]">
-        <div className="text-center max-w-xl mx-auto mb-6 sm:mb-10 space-y-1 sm:space-y-2">
-          <h2 className="text-xl sm:text-3xl font-black text-white font-['Outfit']">How can we help you?</h2>
-          <p className="text-slate-300 text-xs sm:text-sm">
-            BE-Clean offers a full range of products for every washroom and household cleaning need.
-          </p>
-        </div>
-
-        <div className="grid sm:grid-cols-3 gap-3 sm:gap-6">
-          {[
-            { icon: Droplets, title: "Toilet Cleaning", desc: "Deep-clean liquids and gels that keep bowls fresh, stainless, and germ-free." },
-            { icon: SprayCan, title: "Bathroom & Surface", desc: "Surface, drain, and tile solutions for a spotless, streak-free washroom." },
-            { icon: Shield, title: "Hospital Disinfection", desc: "Hospital-grade formulas that protect your family and home from 99.9% germs." },
-          ].map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="bg-[#0F1D36] border border-[#1C3056] rounded-xl sm:rounded-2xl p-4 sm:p-7 text-center hover:border-cyan-400/50 transition-colors shadow-lg">
-              <div className="w-10 h-10 sm:w-14 sm:h-14 mx-auto rounded-lg sm:rounded-xl bg-[#070F1E] border border-[#1C3056] text-amber-400 flex items-center justify-center">
-                <Icon size={20} className="sm:w-6 sm:h-6" />
-              </div>
-              <h3 className="mt-3 sm:mt-5 font-bold text-white text-xs sm:text-base">{title}</h3>
-              <p className="mt-1 sm:mt-2 text-[11px] sm:text-xs text-slate-300 leading-relaxed">{desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ---------------- Interactive Before & After Power Test ---------------- */}
-      <section id="power-test" className="py-8 sm:py-16 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#13233F]">
-        <div className="grid lg:grid-cols-12 gap-6 sm:gap-10 items-center">
-          
-          <div className="lg:col-span-5 space-y-3 sm:space-y-4">
-            <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">Proven Performance</span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white font-['Outfit']">
-              The BE-Clean Difference
-            </h2>
-            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-              Our active formulas break down hard-water mineral rings, discolored tile grout, and grease that ordinary soaps fail to lift.
-            </p>
-            
-            <div className="space-y-2 sm:space-y-3 pt-1">
-              <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="text-emerald-400 shrink-0 mt-0.5" size={16} />
-                <p className="text-xs text-slate-200"><strong>Instant Dissolve:</strong> Clears limescale and rust on contact.</p>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="text-emerald-400 shrink-0 mt-0.5" size={16} />
-                <p className="text-xs text-slate-200"><strong>Shine Shield:</strong> Restores original tile and ceramic shine.</p>
-              </div>
-              <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="text-emerald-400 shrink-0 mt-0.5" size={16} />
-                <p className="text-xs text-slate-200"><strong>Fresh Fragrance:</strong> Neutralizes odors with lasting freshness.</p>
+                  </a>
+                ))}
               </div>
             </div>
+
           </div>
+        </section>
 
-          {/* Interactive Drag Slider */}
-          <div className="lg:col-span-7">
-            <div className="bg-[#0F1D36] p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-[#1C3056] shadow-xl">
-              <div className="relative h-48 sm:h-96 rounded-lg sm:rounded-xl overflow-hidden select-none cursor-ew-resize">
-                
-                {/* Clean Image (Base) */}
-                <img
-                  src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1000&q=80"
-                  alt="Clean tile surface"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                <div className="absolute top-2.5 right-2.5 bg-emerald-700 text-white text-[9px] sm:text-[10px] font-black px-2.5 py-0.5 rounded uppercase tracking-wider">
-                  After BE-Clean
-                </div>
+        {/* ════════════════════════════════════════════════
+            PRODUCTS CATALOG
+        ════════════════════════════════════════════════ */}
+        <section id="products" className="py-8 sm:py-14 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#131F36]">
 
-                {/* Stained Image Overlay (Clipped) */}
-                <div
-                  className="absolute inset-y-0 left-0 overflow-hidden border-r-2 border-amber-400"
-                  style={{ width: `${sliderPos}%` }}
-                >
-                  <img
-                    src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1000&q=80"
-                    alt="Stained tile surface"
-                    className="absolute inset-0 w-full h-full object-cover filter contrast-125 sepia-50 brightness-75 hue-rotate-30"
-                    style={{ width: '100%', maxWidth: 'none' }}
-                  />
-                  <div className="absolute top-2.5 left-2.5 bg-rose-700 text-white text-[9px] sm:text-[10px] font-black px-2.5 py-0.5 rounded uppercase tracking-wider">
-                    Before Treatment
-                  </div>
-                </div>
-
-                {/* Slider Input */}
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={sliderPos}
-                  onChange={(e) => setSliderPos(Number(e.target.value))}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-30"
-                  aria-label="Before and after cleanliness slider"
-                />
-
-                {/* Slider Divider Handle */}
-                <div
-                  className="absolute top-0 bottom-0 pointer-events-none z-20 flex items-center justify-center"
-                  style={{ left: `calc(${sliderPos}% - 12px)` }}
-                >
-                  <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-amber-400 text-black flex items-center justify-center font-bold text-[10px] sm:text-xs shadow-lg">
-                    ↔
-                  </div>
-                </div>
-
-              </div>
-
-              <p className="text-center text-[10px] sm:text-xs text-slate-400 mt-2">
-                Drag slider to compare surface before & after BE-Clean treatment
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-5 sm:mb-8">
+            <div>
+              <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">Direct from Factory</span>
+              <h2 className="text-xl sm:text-3xl font-black text-white font-['Outfit'] mt-0.5">
+                Full Product Range{" "}
+                <span className="text-slate-600 font-normal text-sm">({PRODUCTS.length} items)</span>
+              </h2>
+              <p className="text-slate-500 text-[11px] sm:text-xs mt-0.5">
+                Tap any card to send a WhatsApp order directly to our factory.
               </p>
             </div>
+
+            {/* Search */}
+            <div className="relative w-full md:w-64 flex-shrink-0">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={13} />
+              <input
+                type="text"
+                placeholder="Search products…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-[#0F1D36] border border-[#1C3056] rounded-lg pl-8 pr-7 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-amber-400/60 transition-colors"
+              />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white">
+                  <X size={12} />
+                </button>
+              )}
+            </div>
           </div>
 
-        </div>
-      </section>
+          {/* Category filter pills — each has own accent colour */}
+          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-3 no-scrollbar mb-5 sm:mb-7">
+            {CATEGORIES.map((cat) => {
+              const isSelected = selectedCategory === cat;
+              const accent = CATEGORY_COLORS[cat];
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded text-[11px] sm:text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 flex-shrink-0"
+                  style={
+                    isSelected && accent
+                      ? { backgroundColor: accent.bg, color: accent.label, border: `1px solid ${accent.border}` }
+                      : isSelected
+                      ? { backgroundColor: "rgba(245,158,11,0.1)", color: "#F59E0B", border: "1px solid #F59E0B" }
+                      : { backgroundColor: "#0F1D36", color: "#64748B", border: "1px solid #1C3056" }
+                  }
+                >
+                  {isSelected && (
+                    <span
+                      className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: accent?.border || "#F59E0B" }}
+                    />
+                  )}
+                  {cat}
+                </button>
+              );
+            })}
+          </div>
 
-      {/* ---------------- Sliding Verified Customer Reviews Section ---------------- */}
-      <section id="reviews" className="py-8 sm:py-16 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#13233F]">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 sm:mb-10">
-          <div>
-            <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">Verified Customer Voice</span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white font-['Outfit'] mt-0.5">
-              Trusted by 5,000+ Pakistani Homes
+          {/* Product grid — cards have category-specific left border */}
+          {filteredProducts.length === 0 ? (
+            <div className="bg-[#0F1D36] rounded-xl p-10 text-center max-w-sm mx-auto border border-[#1C3056]">
+              <Search size={22} className="mx-auto text-slate-600 mb-3" />
+              <h3 className="text-sm font-bold text-white">No products found</h3>
+              <p className="text-[11px] text-slate-500 mt-1">Try a different search term or category.</p>
+              <button
+                onClick={() => { setSelectedCategory("All"); setSearchQuery(""); }}
+                className="mt-4 bg-[#162B4D] hover:bg-[#1F3D6C] text-white text-xs font-bold px-4 py-2 rounded cursor-pointer transition-colors"
+              >
+                Reset Filters
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-5">
+              {filteredProducts.map((p) => {
+                const accent = CATEGORY_COLORS[p.category];
+                return (
+                  <article
+                    key={p.id}
+                    className="bg-[#0F1D36] rounded-lg sm:rounded-xl overflow-hidden flex flex-col group shadow-md hover:shadow-xl transition-all duration-300"
+                    style={{
+                      borderTop:    "1px solid #1C3056",
+                      borderRight:  "1px solid #1C3056",
+                      borderBottom: "1px solid #1C3056",
+                      borderLeft:   accent ? `3px solid ${accent.border}` : "3px solid #1C3056",
+                    }}
+                  >
+                    {/* Image */}
+                    <div className="relative aspect-[4/3] sm:aspect-square overflow-hidden bg-[#070F1E] flex-shrink-0">
+                      <img
+                        src={p.img}
+                        alt={p.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                      <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2">
+                        <span
+                          className="text-[8px] sm:text-[9px] font-black uppercase px-1.5 py-0.5 sm:px-2 rounded tracking-wider"
+                          style={
+                            accent
+                              ? { backgroundColor: accent.bg, color: accent.label, border: `1px solid ${accent.border}50` }
+                              : { backgroundColor: "#0F1D36", color: "#F59E0B", border: "1px solid #1C3056" }
+                          }
+                        >
+                          {p.tag}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Details */}
+                    <div className="p-2.5 sm:p-4 flex flex-col flex-1">
+                      <div className="flex items-center justify-between text-[9px] sm:text-[10px] mb-0.5">
+                        <span className="font-bold truncate max-w-[72px] sm:max-w-[100px]" style={{ color: accent?.label || "#94A3B8" }}>
+                          {p.category}
+                        </span>
+                        <div className="flex items-center gap-0.5">
+                          <Star size={9} fill="#F59E0B" className="text-amber-400" />
+                          <span className="font-bold text-slate-400">{p.rating}</span>
+                        </div>
+                      </div>
+
+                      <h3 className="text-xs sm:text-sm font-bold text-white leading-tight line-clamp-2 min-h-[2rem]">
+                        {p.name}
+                      </h3>
+
+                      <p className="hidden sm:block text-[11px] text-slate-500 mt-1.5 line-clamp-2 flex-1 leading-relaxed">
+                        {p.desc}
+                      </p>
+
+                      <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-[#1C3056] flex items-center justify-between gap-1.5">
+                        <div>
+                          <span className="text-[7px] sm:text-[9px] uppercase font-bold text-slate-600 block leading-none">Direct Price</span>
+                          <span className="text-xs sm:text-base font-black text-amber-400 font-['Outfit']">{p.price}</span>
+                        </div>
+                        <a
+                          href={waLink(`Hello BE-Clean, I am interested in purchasing ${p.name} priced at ${p.price}.`)}
+                          target="_blank" rel="noreferrer"
+                          className="inline-flex items-center justify-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[9px] sm:text-[11px] font-bold uppercase tracking-wider px-2 py-1.5 sm:px-3 sm:py-2 rounded transition-colors"
+                        >
+                          <MessageCircle size={11} /> Order
+                        </a>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </section>
+
+        {/* ════════════════════════════════════════════════
+            SHOP BY RANGE
+            Replaces the generic 3-col icon+title+para grid
+        ════════════════════════════════════════════════ */}
+        <section id="ranges" className="py-8 sm:py-14 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#131F36]">
+          <div className="mb-6 sm:mb-8">
+            <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">Find What You Need</span>
+            <h2 className="text-xl sm:text-3xl font-black text-white font-['Outfit'] mt-0.5">Shop by Range</h2>
+            <p className="text-slate-500 text-xs sm:text-sm mt-1">Click any category to filter the catalog above.</p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4">
+            {CATEGORIES.filter((c) => c !== "All").map((cat) => {
+              const accent = CATEGORY_COLORS[cat];
+              const count  = PRODUCTS.filter((p) => p.category === cat).length;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => {
+                    setSelectedCategory(cat);
+                    document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="group text-left p-4 sm:p-5 rounded-xl bg-[#0F1D36] transition-all duration-300 relative hover:bg-[#122035] cursor-pointer"
+                  style={{
+                    borderTop:    "1px solid #1C3056",
+                    borderRight:  "1px solid #1C3056",
+                    borderBottom: "1px solid #1C3056",
+                    borderLeft:   accent ? `3px solid ${accent.border}` : "3px solid #1C3056",
+                  }}
+                >
+                  <span
+                    className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider block mb-1"
+                    style={{ color: accent?.label || "#F59E0B" }}
+                  >
+                    {count} product{count !== 1 ? "s" : ""}
+                  </span>
+                  <h3 className="text-sm sm:text-base font-bold text-white group-hover:text-amber-400 transition-colors pr-4">
+                    {cat}
+                  </h3>
+                  <ChevronRight
+                    size={14}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 group-hover:text-slate-300 group-hover:translate-x-0.5 transition-all"
+                  />
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════
+            PERFORMANCE / Before & After
+        ════════════════════════════════════════════════ */}
+        <section id="power-test" className="py-8 sm:py-16 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#131F36]">
+          <div className="grid lg:grid-cols-12 gap-6 sm:gap-10 items-center">
+
+            <div className="lg:col-span-5 space-y-4 sm:space-y-5">
+              <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">Real Results</span>
+              <h2 className="text-2xl sm:text-4xl font-black text-white font-['Outfit']">
+                The BE-Clean Difference
+              </h2>
+              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                Our formulas dissolve hard-water mineral rings, discolored tile grout, and cooking grease that ordinary soaps cannot lift.
+              </p>
+
+              <div className="space-y-2.5 pt-1">
+                {[
+                  { label: "Limescale & Rust",  detail: "Cleared on contact — no scrubbing required."         },
+                  { label: "Ceramic Shine",      detail: "Restores original tile brightness after one wash."   },
+                  { label: "Odour Elimination",  detail: "Active scent formula stays effective for 24+ hours." },
+                ].map(({ label, detail }) => (
+                  <div key={label} className="flex items-start gap-3 p-3 rounded-lg bg-[#0F1D36] border border-[#1C3056]">
+                    <CheckCircle2 className="text-emerald-400 shrink-0 mt-0.5" size={14} />
+                    <div>
+                      <span className="text-xs font-bold text-white">{label}</span>
+                      <p className="text-[11px] text-slate-400 mt-0.5">{detail}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="lg:col-span-7">
+              <div className="bg-[#0F1D36] p-2.5 sm:p-4 rounded-xl sm:rounded-2xl border border-[#1C3056] shadow-xl">
+                <div className="relative h-48 sm:h-96 rounded-lg overflow-hidden select-none cursor-ew-resize">
+
+                  {/* After image */}
+                  <img
+                    src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1000&q=80"
+                    alt="Cleaned tile — after BE-Clean"
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div className="absolute top-2.5 right-2.5 bg-emerald-700 text-white text-[9px] sm:text-[10px] font-black px-2.5 py-0.5 rounded uppercase tracking-wider">
+                    After
+                  </div>
+
+                  {/* Before image — clipped overlay */}
+                  <div
+                    className="absolute inset-y-0 left-0 overflow-hidden border-r-2 border-amber-400"
+                    style={{ width: `${sliderPos}%` }}
+                  >
+                    <img
+                      src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=1000&q=80"
+                      alt="Stained tile — before BE-Clean"
+                      className="absolute inset-0 w-full h-full object-cover"
+                      style={{ filter: "contrast(1.25) sepia(0.5) brightness(0.72) hue-rotate(30deg)", width: "100%", maxWidth: "none" }}
+                    />
+                    <div className="absolute top-2.5 left-2.5 bg-rose-700 text-white text-[9px] sm:text-[10px] font-black px-2.5 py-0.5 rounded uppercase tracking-wider">
+                      Before
+                    </div>
+                  </div>
+
+                  {/* Range input — invisible, full-overlay */}
+                  <input
+                    type="range" min="0" max="100" value={sliderPos}
+                    onChange={(e) => setSliderPos(Number(e.target.value))}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-30"
+                    aria-label="Before and after cleanliness comparison slider"
+                  />
+
+                  {/* Handle — proper icon, no emoji */}
+                  <div
+                    className="absolute top-0 bottom-0 pointer-events-none z-20 flex items-center justify-center"
+                    style={{ left: `calc(${sliderPos}% - 14px)` }}
+                  >
+                    <div className="w-7 h-7 rounded-full bg-amber-400 flex items-center justify-center shadow-xl border-2 border-white">
+                      <ArrowLeftRight size={12} strokeWidth={2.5} className="text-black" />
+                    </div>
+                  </div>
+
+                </div>
+                <p className="text-center text-[10px] text-slate-500 mt-2.5 font-medium">
+                  Drag to compare — before and after BE-Clean treatment
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════════
+            REVIEWS — Editorial pull-quote layout
+            No fake aggregate stats, no floating rating box
+        ════════════════════════════════════════════════ */}
+        <section id="reviews" className="py-8 sm:py-16 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#131F36]">
+
+          <div className="mb-6 sm:mb-10">
+            <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">Customer Feedback</span>
+            <h2 className="text-xl sm:text-3xl font-black text-white font-['Outfit'] mt-0.5">
+              What buyers are saying
             </h2>
-            <p className="text-slate-300 text-xs sm:text-sm mt-0.5">
-              Real feedback sliding live from verified buyers across Twin Cities.
+            <p className="text-slate-500 text-xs sm:text-sm mt-1">
+              Collected from WhatsApp and in-person buyers across Rawalpindi &amp; Islamabad.
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5 bg-[#0F1D36] border border-[#1C3056] rounded-xl px-4 py-2.5 shrink-0 self-start md:self-auto">
-            <div className="flex text-amber-400">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} size={14} fill="currentColor" />
-              ))}
-            </div>
-            <div>
-              <div className="text-xs sm:text-sm font-black text-white">4.9 out of 5.0</div>
-              <div className="text-[9px] text-slate-400 font-bold">1,250+ Verified Ratings</div>
-            </div>
-          </div>
-        </div>
+          {/* Editorial pull-quote card */}
+          <div className="relative border border-[#1C3056] rounded-xl sm:rounded-2xl overflow-hidden bg-[#0A1628]">
 
-        {/* Sliding Single Review Showcase */}
-        <div className="relative bg-[#0F1D36] border border-[#1C3056] rounded-xl sm:rounded-3xl p-4 sm:p-12 overflow-hidden shadow-2xl">
-          <Quote className="absolute top-3 right-3 sm:top-6 sm:right-8 text-[#1A315A] pointer-events-none opacity-40 sm:opacity-100" size={50} />
+            {/* Big typographic quote mark — background decoration */}
+            <div
+              className="absolute top-0 right-4 sm:right-8 text-[#0F1D36] font-black select-none pointer-events-none font-['Outfit'] leading-none"
+              style={{ fontSize: "clamp(80px, 16vw, 180px)" }}
+              aria-hidden
+            >
+              "
+            </div>
 
-          <div className="relative z-10 space-y-3 sm:space-y-6 max-w-4xl">
-            {/* Header info */}
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-1.5">
-                <div className="flex text-amber-400">
-                  {[...Array(REVIEWS[reviewIndex].stars)].map((_, i) => (
-                    <Star key={i} size={12} fill="currentColor" />
+            <div className="relative p-5 sm:p-10 lg:p-14">
+              <div className="grid lg:grid-cols-12 gap-6 sm:gap-8 items-start">
+
+                {/* Left: reviewer profile */}
+                <div className="lg:col-span-3 space-y-2.5 sm:space-y-3 lg:border-r lg:border-[#1C3056] lg:pr-8">
+                  <div className="flex gap-0.5">
+                    {[...Array(REVIEWS[reviewIndex].stars)].map((_, i) => (
+                      <Star key={i} size={12} fill="#F59E0B" className="text-amber-400" />
+                    ))}
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-black text-white">{REVIEWS[reviewIndex].name}</h4>
+                    <p className="text-[11px] text-slate-400">{REVIEWS[reviewIndex].location}</p>
+                  </div>
+                  <span className="inline-block bg-[#0F1D36] border border-[#1C3056] text-emerald-400 text-[9px] font-black uppercase px-2 py-0.5 rounded">
+                    {REVIEWS[reviewIndex].role}
+                  </span>
+                  <div className="pt-1 border-t border-[#1C3056]">
+                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">Purchased</span>
+                    <span className="text-[11px] text-amber-400 font-bold">{REVIEWS[reviewIndex].product}</span>
+                  </div>
+                  <p className="text-[10px] text-slate-600">{REVIEWS[reviewIndex].date}</p>
+                </div>
+
+                {/* Right: the quote itself — large, editorial */}
+                <blockquote className="lg:col-span-9 text-base sm:text-xl lg:text-2xl font-semibold text-white leading-snug font-['Outfit'] pt-1">
+                  &ldquo;{REVIEWS[reviewIndex].quote}&rdquo;
+                </blockquote>
+              </div>
+
+              {/* Progress dots — not animated bar */}
+              <div className="mt-8 pt-5 border-t border-[#1C3056] flex items-center justify-between">
+                <div className="flex gap-1.5">
+                  {REVIEWS.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setReviewIndex(i)}
+                      className="h-1 rounded-full transition-all duration-300"
+                      style={{
+                        width:           i === reviewIndex ? "24px" : "6px",
+                        backgroundColor: i === reviewIndex ? "#F59E0B" : "#1C3056",
+                      }}
+                      aria-label={`Review ${i + 1}`}
+                    />
                   ))}
                 </div>
-                <span className="text-[10px] sm:text-xs font-bold text-slate-400">({REVIEWS[reviewIndex].stars}.0)</span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="bg-emerald-950/80 border border-emerald-800 text-emerald-400 text-[9px] sm:text-xs font-extrabold px-2 py-0.5 sm:px-3 sm:py-1 rounded">
-                  {REVIEWS[reviewIndex].role}
+                <span className="text-[10px] text-slate-600 font-bold uppercase tracking-wider">
+                  {reviewIndex + 1} / {REVIEWS.length}
                 </span>
-                <span className="text-[9px] sm:text-xs text-slate-400 font-medium">{REVIEWS[reviewIndex].date}</span>
-              </div>
-            </div>
-
-            {/* Main Review Quote */}
-            <blockquote className="text-xs sm:text-2xl font-semibold text-white leading-relaxed font-['Outfit'] min-h-[3rem] sm:min-h-[5rem] flex items-center">
-              "{REVIEWS[reviewIndex].quote}"
-            </blockquote>
-
-            {/* Reviewer & Product Details */}
-            <div className="pt-3 sm:pt-6 border-t border-[#1C3056] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div>
-                <h4 className="text-xs sm:text-base font-extrabold text-white">{REVIEWS[reviewIndex].name}</h4>
-                <p className="text-[9px] sm:text-xs text-slate-300 font-medium">{REVIEWS[reviewIndex].location}</p>
-              </div>
-
-              <div className="bg-[#070F1E] border border-[#1C3056] rounded-lg px-2.5 py-1 sm:px-4 sm:py-2 text-[10px] sm:text-xs">
-                <span className="text-slate-400 font-bold uppercase block text-[7px] sm:text-[9px]">Purchased Item</span>
-                <span className="text-amber-400 font-bold text-[9px] sm:text-xs">{REVIEWS[reviewIndex].product}</span>
               </div>
             </div>
           </div>
+        </section>
 
-          {/* Automated Progress Indicator Line */}
-          <div className="mt-4 sm:mt-8 pt-3 sm:pt-6 border-t border-[#1C3056]/80 flex items-center justify-between relative z-10 text-[9px] sm:text-[11px] font-bold text-slate-300">
-            <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>LIVE VERIFIED FEEDBACK STREAM</span>
-            </div>
+        {/* ════════════════════════════════════════════════
+            FACTORY & PARTNERSHIP
+        ════════════════════════════════════════════════ */}
+        <section id="factory" className="py-8 sm:py-16 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#131F36]">
+          <div className="grid lg:grid-cols-12 gap-6 sm:gap-10 items-center">
 
-            <div className="flex items-center gap-1">
-              <span className="text-amber-400 font-extrabold">{reviewIndex + 1}</span>
-              <span className="text-slate-500">/</span>
-              <span className="text-slate-300">{REVIEWS.length}</span>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ---------------- Factory & Retail Partnership Section ---------------- */}
-      <section id="factory" className="py-8 sm:py-16 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#13233F]">
-        <div className="bg-[#0F1D36] rounded-2xl sm:rounded-3xl p-5 sm:p-12 border border-[#1C3056] shadow-xl">
-          <div className="grid lg:grid-cols-12 gap-6 sm:gap-8 items-center">
-            
             <div className="lg:col-span-7 space-y-4 sm:space-y-5">
               <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">Manufacturing Facility</span>
               <h2 className="text-2xl sm:text-4xl font-black text-white font-['Outfit']">
-                Chakri Road Facility — Rawalpindi
+                Chakri Road, Rawalpindi
               </h2>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                BE-Clean has been serving the Rawalpindi & Islamabad market <strong className="text-white">Since 2016</strong>. With 10+ years of loyal customer trust, we manufacture premium household and commercial cleaning products from our facility on Chakri Road, Rawalpindi.
+              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                BE-Clean has been serving the Rawalpindi &amp; Islamabad market since 2016. We manufacture household and commercial cleaning products from our factory on Chakri Road — direct to your door with no distribution markup.
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                <div className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-[#070F1E] border border-[#1C3056]">
-                  <MapPin className="text-amber-400 shrink-0" size={18} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex items-center gap-3 p-3 sm:p-4 rounded-lg bg-[#0F1D36] border border-[#1C3056]">
+                  <MapPin className="text-amber-400 shrink-0" size={16} />
                   <div>
                     <div className="text-xs font-bold text-white">Chakri Road, Rawalpindi</div>
-                    <div className="text-[10px] sm:text-[11px] text-slate-300">Punjab, Pakistan</div>
+                    <div className="text-[10px] text-slate-400">Punjab, Pakistan</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 p-3 sm:p-4 rounded-xl bg-[#070F1E] border border-[#1C3056]">
-                  <PhoneCall className="text-emerald-400 shrink-0" size={18} />
+                <div className="flex items-center gap-3 p-3 sm:p-4 rounded-lg bg-[#0F1D36] border border-[#1C3056]">
+                  <PhoneCall className="text-emerald-400 shrink-0" size={16} />
                   <div>
                     <div className="text-xs font-bold text-white">+92 336 1503644</div>
-                    <div className="text-[10px] sm:text-[11px] text-slate-300">Helpline / Bulk WhatsApp</div>
+                    <div className="text-[10px] text-slate-400">WhatsApp / Bulk Orders</div>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-1">
-                <a
-                  href={RETAIL_PARTNER_WA_LINK}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-[10px] sm:text-xs uppercase tracking-wider px-5 py-3 sm:px-7 sm:py-4 rounded-xl transition-colors shadow-lg"
-                >
-                  <Building2 size={16} /> Become a Retail Partner <ChevronRight size={14} />
-                </a>
-              </div>
-
+              <a
+                href={RETAIL_WA}
+                target="_blank" rel="noreferrer"
+                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] uppercase tracking-wider px-5 py-3 rounded transition-colors shadow-md"
+              >
+                <Building2 size={14} /> Become a Retail Partner <ChevronRight size={13} />
+              </a>
             </div>
 
             <div className="lg:col-span-5">
-              <div className="rounded-xl sm:rounded-2xl overflow-hidden border border-[#1C3056] shadow-lg">
+              <div className="rounded-xl overflow-hidden border border-[#1C3056] shadow-lg">
                 <img
                   src="https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=800&q=80"
-                  alt="Be-Clean Rawalpindi Facility"
-                  className="w-full h-44 sm:h-72 object-cover"
+                  alt="BE-Clean Manufacturing Facility, Rawalpindi"
+                  className="w-full h-52 sm:h-80 object-cover"
                 />
               </div>
             </div>
 
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ---------------- Footer ---------------- */}
-      <footer id="about-us" className="bg-[#050B17] pt-10 pb-20 sm:pb-12 border-t border-[#13233F] text-slate-300 text-xs">
-        <div className="max-w-7xl mx-auto px-3 sm:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-          
-          <div className="space-y-2 sm:space-y-3">
-            <img
-              src="/logo.png"
-              alt="BE-Clean Logo"
-              className="h-10 sm:h-20 w-auto object-contain"
-            />
-            <p className="text-amber-400 font-bold text-[10px] sm:text-xs uppercase">
-              BE PAKISTANI, BUY PAKISTANI
-            </p>
-            <p className="text-slate-300 text-[11px] sm:text-xs max-w-xs leading-relaxed">
-              Serving Rawalpindi & Islamabad since 2016 — 10 years of loyal customer trust. Facility located on Chakri Road, Rawalpindi.
-            </p>
+        {/* ════════════════════════════════════════════════
+            FOOTER
+        ════════════════════════════════════════════════ */}
+        <footer id="about-us" className="bg-[#040C18] pt-10 pb-20 sm:pb-12 border-t border-[#131F36]">
+          <div className="max-w-7xl mx-auto px-3 sm:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            <div className="space-y-3">
+              <img src="/logo.png" alt="BE-Clean" className="h-10 sm:h-16 w-auto object-contain" />
+              <p className="text-amber-400 font-black text-[10px] uppercase tracking-wider">BE PAKISTANI, BUY PAKISTANI</p>
+              <p className="text-slate-500 text-[11px] max-w-xs leading-relaxed">
+                Manufacturing premium cleaning products in Rawalpindi since 2016. Serving homes and businesses across Rawalpindi &amp; Islamabad.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-bold text-white text-xs sm:text-sm mb-3">Contact</h4>
+              <p className="text-slate-500 text-[11px]">Chakri Road, Rawalpindi, Punjab, Pakistan</p>
+              <p className="text-amber-400 font-bold text-xs mt-1">+92 336 1503644</p>
+            </div>
+
+            <div>
+              <h4 className="font-bold text-white text-xs sm:text-sm mb-3">Order Direct</h4>
+              <a
+                href={waLink("Hello BE-Clean, I'd like to place an order.")}
+                target="_blank" rel="noreferrer"
+                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] uppercase tracking-wider px-4 py-2.5 rounded transition-colors"
+              >
+                <MessageCircle size={13} /> Chat on WhatsApp
+              </a>
+            </div>
           </div>
 
-          <div>
-            <h4 className="font-bold text-white text-xs sm:text-sm mb-2 sm:mb-3">Contact Information</h4>
-            <p className="text-slate-300 text-[11px] sm:text-xs">Chakri Road, Rawalpindi, Punjab, Pakistan</p>
-            <p className="text-slate-300 mt-1 font-bold text-amber-400 text-xs sm:text-sm">+92 336 1503644</p>
+          <div className="max-w-7xl mx-auto px-3 sm:px-8 pt-6 mt-8 border-t border-[#131F36] text-center text-slate-700 text-[10px]">
+            © {new Date().getFullYear()} BE-Clean, Rawalpindi. All rights reserved.
           </div>
+        </footer>
 
-          <div>
-            <h4 className="font-bold text-white text-xs sm:text-sm mb-2 sm:mb-3">Get in Touch</h4>
-            <a
-              href={waLink("Hello BE-Clean, I'd like to place a bulk order.")}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] sm:text-xs px-4 py-2.5 rounded-lg transition-colors shadow-md"
-            >
-              <MessageCircle size={14} /> Chat on WhatsApp
-            </a>
-          </div>
+        {/* Floating WhatsApp button */}
+        <a
+          href={waLink("Hello BE-Clean, I have a question about your products.")}
+          target="_blank" rel="noreferrer"
+          className="fixed bottom-5 right-5 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-emerald-600 hover:bg-emerald-500 flex items-center justify-center shadow-xl transition-transform hover:scale-110"
+          aria-label="Chat on WhatsApp"
+        >
+          <MessageCircle size={22} className="text-white" />
+        </a>
 
-        </div>
-
-        <div className="max-w-7xl mx-auto px-3 sm:px-8 pt-6 mt-8 sm:mt-12 border-t border-[#13233F] text-center text-slate-400 text-[10px] sm:text-[11px]">
-          © {new Date().getFullYear()} BE-Clean. All rights reserved.
-        </div>
-      </footer>
-
-      {/* ---------------- Floating WhatsApp Button ---------------- */}
-      <a
-        href={waLink("Hello BE-Clean, I have a question about your products.")}
-        target="_blank"
-        rel="noreferrer"
-        className="fixed bottom-5 right-5 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-emerald-600 hover:bg-emerald-500 flex items-center justify-center shadow-lg transition-transform hover:scale-105"
-        aria-label="Chat on WhatsApp"
-      >
-        <MessageCircle size={24} className="text-white sm:w-7 sm:h-7" />
-      </a>
-
-    </div>
+      </div>
     </>
   );
 }

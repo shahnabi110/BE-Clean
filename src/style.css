@@ -1,19 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @layer base {
   :root {
-    --bg-main: #070F1E;
-    --bg-card: #0F1D36;
-    --bg-card-hover: #152648;
+    --bg-main:      #070F1E;
+    --bg-card:      #0F1D36;
     --border-color: #1C3056;
-    --accent-emerald: #00E5A3;
-    --accent-cyan: #06B6D4;
-    --accent-gold: #F59E0B;
+    --accent-amber: #F59E0B;
+    --accent-emerald: #10B981;
+    --accent-cyan:  #0EA5E9;
   }
-  
+
   html {
     scroll-behavior: smooth;
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont,
+      'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   }
 
   body {
@@ -23,45 +24,43 @@
   }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #070F1E;
-}
-::-webkit-scrollbar-thumb {
-  background: #1C3056;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #06B6D4;
-}
+/* ── Custom scrollbar ──────────────────────────────────── */
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: #070F1E; }
+::-webkit-scrollbar-thumb  { background: #1C3056; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #F59E0B; }
 
-/* Hide scrollbar utility */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+/* Hide scrollbar (category pills, marquee) */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Pure CSS Horizontal Marquee Loop */
+/* ── Marquee animation ─────────────────────────────────── */
 @keyframes marquee {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee             { animation: marquee 35s linear infinite; }
+.animate-marquee:hover       { animation-play-state: paused; }
+
+/* ── Product card category left-border accent 
+      Applied via inline style in JSX — no extra class needed.
+      But we define a smooth hover lift here. ─────────────── */
+article {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+article:hover {
+  transform: translateY(-2px);
 }
 
-.animate-marquee {
-  animation: marquee 35s linear infinite;
+/* ── Review section — typographic quote mark ──────────── */
+.review-quote-bg {
+  font-size: clamp(80px, 16vw, 180px);
+  line-height: 1;
+  color: #0F1D36;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  user-select: none;
+  pointer-events: none;
 }
 
-.animate-marquee:hover {
-  animation-play-state: paused;
-}
+
