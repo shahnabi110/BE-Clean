@@ -62,7 +62,7 @@ export default function SlidingStrip() {
   const handleEnd = () => {
     if (!isDragging) return;
     setIsDragging(false);
-    const threshold = 40;
+    const threshold = 35;
     if (dragOffset < -threshold) {
       handleNext();
     } else if (dragOffset > threshold) {
@@ -95,10 +95,10 @@ export default function SlidingStrip() {
 
     const absOffset = Math.abs(offset);
 
-    // Responsive position offsets
-    const translateXStep = isMobile ? 125 : 230;
-    const rotateYAngle   = isMobile ? 14 : 22;
-    const translateZStep = isMobile ? 100 : 160;
+    // Ultra-sleek responsive position steps for mobile vs desktop
+    const translateXStep = isMobile ? 90 : 230;
+    const rotateYAngle   = isMobile ? 10 : 22;
+    const translateZStep = isMobile ? 70 : 160;
 
     let translateX = offset * translateXStep + dragOffset * 0.4;
     let rotateY = 0;
@@ -106,34 +106,34 @@ export default function SlidingStrip() {
     let scale = 1;
     let opacity = 1;
     let zIndex = 10 - absOffset;
-    let shadow = '0 10px 25px -5px rgba(0, 0, 0, 0.4)';
+    let shadow = '0 8px 20px -4px rgba(0, 0, 0, 0.4)';
 
     if (offset === 0) {
-      // Center card — largest, upright, in focus
+      // Center card — focused, sleek & clean
       rotateY = dragOffset * 0.05;
-      translateZ = 30;
-      scale = isMobile ? 1.04 : 1.08;
+      translateZ = isMobile ? 15 : 30;
+      scale = isMobile ? 1.02 : 1.08;
       opacity = 1;
       zIndex = 30;
-      shadow = '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 35px rgba(245, 158, 11, 0.15)';
+      shadow = '0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 25px rgba(245, 158, 11, 0.12)';
     } else if (offset > 0) {
       // Right side cards
       rotateY = -rotateYAngle * Math.min(absOffset, 2);
       translateZ = -translateZStep * absOffset;
-      scale = Math.max(0.7, 1 - absOffset * 0.14);
-      opacity = Math.max(0.2, 0.85 - absOffset * 0.25);
-      shadow = '0 12px 30px -8px rgba(0, 0, 0, 0.5)';
+      scale = Math.max(0.65, 1 - absOffset * (isMobile ? 0.12 : 0.14));
+      opacity = Math.max(0.2, 0.82 - absOffset * 0.25);
+      shadow = '0 10px 25px -6px rgba(0, 0, 0, 0.5)';
     } else {
       // Left side cards
       rotateY = rotateYAngle * Math.min(absOffset, 2);
       translateZ = -translateZStep * absOffset;
-      scale = Math.max(0.7, 1 - absOffset * 0.14);
-      opacity = Math.max(0.2, 0.85 - absOffset * 0.25);
-      shadow = '0 12px 30px -8px rgba(0, 0, 0, 0.5)';
+      scale = Math.max(0.65, 1 - absOffset * (isMobile ? 0.12 : 0.14));
+      opacity = Math.max(0.2, 0.82 - absOffset * 0.25);
+      shadow = '0 10px 25px -6px rgba(0, 0, 0, 0.5)';
     }
 
     // Hide cards beyond visible threshold
-    if (absOffset > 2.5) {
+    if (absOffset > 2.2) {
       opacity = 0;
       pointerEvents: 'none';
     }
@@ -154,11 +154,11 @@ export default function SlidingStrip() {
   };
 
   return (
-    <section className="relative w-full py-8 sm:py-14 bg-[#070F1E] overflow-hidden select-none border-b border-[#131F36]">
+    <section className="relative w-full py-4 sm:py-14 bg-[#070F1E] overflow-hidden select-none border-b border-[#131F36]">
 
-      {/* Subtle section label */}
-      <div className="max-w-7xl mx-auto px-4 mb-4 sm:mb-6 text-center">
-        <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-amber-400">
+      {/* Section label */}
+      <div className="max-w-7xl mx-auto px-4 mb-2 sm:mb-6 text-center">
+        <span className="text-[9px] sm:text-xs font-black uppercase tracking-[0.25em] text-amber-400">
           Featured Product Showcase
         </span>
       </div>
@@ -166,8 +166,8 @@ export default function SlidingStrip() {
       {/* 3D Perspective Stage Container */}
       <div
         ref={containerRef}
-        className="relative w-full h-[290px] sm:h-[380px] flex items-center justify-center cursor-grab active:cursor-grabbing"
-        style={{ perspective: isMobile ? '700px' : '1100px' }}
+        className="relative w-full h-[220px] sm:h-[380px] flex items-center justify-center cursor-grab active:cursor-grabbing"
+        style={{ perspective: isMobile ? '600px' : '1100px' }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={onMouseLeave}
         onMouseDown={onMouseDown}
@@ -184,7 +184,7 @@ export default function SlidingStrip() {
           style={{ transformStyle: 'preserve-3d' }}
         >
           {FEATURED_PRODUCTS.map((prod, index) => {
-            const { style, absOffset, offset } = getCardStyle(index);
+            const { style, offset } = getCardStyle(index);
             const isCenter = offset === 0;
 
             return (
@@ -193,48 +193,48 @@ export default function SlidingStrip() {
                 onClick={() => {
                   if (!isCenter) setActiveIndex(index);
                 }}
-                className={`absolute w-[210px] sm:w-[270px] bg-[#0F1D36] rounded-xl sm:rounded-2xl border border-[#1C3056] overflow-hidden flex flex-col transition-colors duration-300 ${
+                className={`absolute w-[145px] sm:w-[270px] bg-[#0F1D36] rounded-lg sm:rounded-2xl border border-[#1C3056] overflow-hidden flex flex-col transition-colors duration-300 ${
                   isCenter ? 'border-amber-500/50 cursor-default' : 'cursor-pointer hover:border-slate-500'
                 }`}
                 style={style}
               >
                 {/* Product Image with subtle parallax inner shift */}
-                <div className="relative aspect-[4/3] sm:aspect-[4/3] overflow-hidden bg-[#050B15]">
+                <div className="relative aspect-[4/3] overflow-hidden bg-[#050B15]">
                   <img
                     src={prod.img}
                     alt={prod.name}
                     className="w-full h-full object-cover transition-transform duration-700 ease-out"
                     style={{
-                      transform: `translateX(${offset * -10}px) scale(1.08)`,
+                      transform: `translateX(${offset * -8}px) scale(1.06)`,
                     }}
                     loading="lazy"
                   />
-                  <div className="absolute top-2 left-2">
-                    <span className="bg-[#070F1E]/90 border border-[#1C3056] text-amber-400 text-[8px] sm:text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-wider">
+                  <div className="absolute top-1 left-1 sm:top-2 sm:left-2">
+                    <span className="bg-[#070F1E]/90 border border-[#1C3056] text-amber-400 text-[7px] sm:text-[9px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider">
                       {prod.tag}
                     </span>
                   </div>
                 </div>
 
                 {/* Card Content Details */}
-                <div className="p-3 sm:p-4 flex flex-col justify-between flex-1 bg-[#0F1D36]">
+                <div className="p-2 sm:p-4 flex flex-col justify-between flex-1 bg-[#0F1D36]">
                   <div>
-                    <div className="flex items-center justify-between text-[9px] sm:text-[10px] text-slate-400 mb-1">
-                      <span className="font-semibold text-slate-300">{prod.category}</span>
+                    <div className="flex items-center justify-between text-[8px] sm:text-[10px] text-slate-400 mb-0.5 sm:mb-1">
+                      <span className="font-semibold text-slate-300 truncate max-w-[70px] sm:max-w-[120px]">{prod.category}</span>
                       <div className="flex items-center gap-0.5 text-amber-400">
-                        <Star size={10} fill="currentColor" />
+                        <Star size={9} fill="currentColor" />
                         <span className="font-bold">{prod.rating}</span>
                       </div>
                     </div>
-                    <h4 className="text-xs sm:text-sm font-bold text-white leading-tight line-clamp-1">
+                    <h4 className="text-[10px] sm:text-sm font-bold text-white leading-tight line-clamp-1">
                       {prod.name}
                     </h4>
                   </div>
 
-                  <div className="mt-3 pt-2.5 border-t border-[#1C3056] flex items-center justify-between">
+                  <div className="mt-1.5 sm:mt-3 pt-1.5 sm:pt-2.5 border-t border-[#1C3056] flex items-center justify-between">
                     <div>
-                      <span className="text-[7px] sm:text-[8px] uppercase font-bold text-slate-500 block leading-none">Price</span>
-                      <span className="text-xs sm:text-base font-black text-amber-400 font-['Outfit']">{prod.price}</span>
+                      <span className="text-[6px] sm:text-[8px] uppercase font-bold text-slate-500 block leading-none">Price</span>
+                      <span className="text-[10px] sm:text-base font-black text-amber-400 font-['Outfit']">{prod.price}</span>
                     </div>
 
                     <a
@@ -242,9 +242,9 @@ export default function SlidingStrip() {
                       target="_blank"
                       rel="noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-2.5 py-1.5 rounded transition-colors shadow"
+                      className="inline-flex items-center gap-0.5 sm:gap-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[8px] sm:text-[10px] font-bold uppercase tracking-wider px-1.5 py-1 sm:px-2.5 sm:py-1.5 rounded transition-colors shadow"
                     >
-                      <MessageCircle size={11} /> Order
+                      <MessageCircle size={10} /> <span className="hidden sm:inline">Order</span>
                     </a>
                   </div>
                 </div>
@@ -257,25 +257,25 @@ export default function SlidingStrip() {
       </div>
 
       {/* Navigation Arrow Controls */}
-      <div className="flex items-center justify-center gap-4 mt-2 sm:mt-4 z-20 relative">
+      <div className="flex items-center justify-center gap-3 sm:gap-4 mt-1 sm:mt-4 z-20 relative">
         <button
           onClick={handlePrev}
           aria-label="Previous Product"
-          className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0F1D36] border border-[#1C3056] hover:border-amber-400 text-slate-300 hover:text-amber-400 flex items-center justify-center transition-all cursor-pointer shadow"
+          className="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-[#0F1D36] border border-[#1C3056] hover:border-amber-400 text-slate-300 hover:text-amber-400 flex items-center justify-center transition-all cursor-pointer shadow"
         >
-          <ChevronLeft size={18} />
+          <ChevronLeft size={15} />
         </button>
 
         {/* Carousel Indicators */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 sm:gap-1.5">
           {FEATURED_PRODUCTS.map((_, i) => (
             <button
               key={i}
               onClick={() => setActiveIndex(i)}
               aria-label={`Go to slide ${i + 1}`}
-              className="h-1.5 rounded-full transition-all duration-300 cursor-pointer"
+              className="h-1 sm:h-1.5 rounded-full transition-all duration-300 cursor-pointer"
               style={{
-                width: i === activeIndex ? '20px' : '6px',
+                width: i === activeIndex ? '16px' : '5px',
                 backgroundColor: i === activeIndex ? '#F59E0B' : '#1C3056',
               }}
             />
@@ -285,9 +285,9 @@ export default function SlidingStrip() {
         <button
           onClick={handleNext}
           aria-label="Next Product"
-          className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0F1D36] border border-[#1C3056] hover:border-amber-400 text-slate-300 hover:text-amber-400 flex items-center justify-center transition-all cursor-pointer shadow"
+          className="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-[#0F1D36] border border-[#1C3056] hover:border-amber-400 text-slate-300 hover:text-amber-400 flex items-center justify-center transition-all cursor-pointer shadow"
         >
-          <ChevronRight size={18} />
+          <ChevronRight size={15} />
         </button>
       </div>
 
