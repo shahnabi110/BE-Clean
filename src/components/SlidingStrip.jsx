@@ -1,40 +1,296 @@
-import React from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { ChevronLeft, ChevronRight, MessageCircle, Star } from 'lucide-react';
 import { PRODUCTS } from '../data/products';
 
+const PHONE = "923361503644";
+const waLink = (name, price) =>
+  `https://wa.me/${PHONE}?text=${encodeURIComponent(`Hello BE-Clean, I want to order ${name} (${price}).`)}`;
+
+// Select 12 featured products across various categories
+const FEATURED_PRODUCTS = PRODUCTS.filter((_, i) => i % 4 === 0).slice(0, 12);
+
 export default function SlidingStrip() {
-  // Select a rich subset of product images for the marquee
-  const marqueeProducts = PRODUCTS.filter((p, i) => i % 2 === 0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartX, setDragStartX] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const total = FEATURED_PRODUCTS.length;
+  const containerRef = useRef(null);
+
+  // Check viewport width for responsive 3D values
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Navigation handlers
+  const handlePrev = useCallback(() => {
+    setActiveIndex((prev) => (prev === 0 ? total - 1 : prev - 1));
+  }, [total]);
+
+  const handleNext = useCallback(() => {
+    setActiveIndex((prev) => (prev === total - 1 ? 0 : prev + 1));
+  }, [total]);
+
+  // Autoplay with pause on hover/drag
+  useEffect(() => {
+    if (isHovered || isDragging) return;
+    const timer = setInterval(() => {
+      handleNext();
+    }, 3600);
+    return () => clearInterval(timer);
+  }, [isHovered, isDragging, handleNext]);
+
+  // Mouse & Touch Drag Handlers
+  const handleStart = (clientX) => {
+    setIsDragging(true);
+    setDragStartX(clientX);
+    setDragOffset(0);
+  };
+
+  const handleMove = (clientX) => {
+    if (!isDragging) return;
+    const delta = clientX - dragStartX;
+    setDragOffset(delta);
+  };
+
+  const handleEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    const threshold = 40;
+    if (dragOffset < -threshold) {
+      handleNext();
+    } else if (dragOffset > threshold) {
+      handlePrev();
+    }
+    setDragOffset(0);
+  };
+
+  // Mouse events
+  const onMouseDown = (e) => handleStart(e.clientX);
+  const onMouseMove = (e) => handleMove(e.clientX);
+  const onMouseUp = () => handleEnd();
+  const onMouseLeave = () => {
+    if (isDragging) handleEnd();
+    setIsHovered(false);
+  };
+
+  // Touch events
+  const onTouchStart = (e) => handleStart(e.touches[0].clientX);
+  const onTouchMove = (e) => handleMove(e.touches[0].clientX);
+  const onTouchEnd = () => handleEnd();
+
+  // Compute 3D transforms for card based on relative index offset
+  const getCardStyle = (index) => {
+    let offset = index - activeIndex;
+
+    // Handle wrap-around for smooth looping visuals
+    if (offset > total / 2) offset -= total;
+    if (offset < -total / 2) offset += total;
+
+    const absOffset = Math.abs(offset);
+
+    // Responsive position offsets
+    const translateXStep = isMobile ? 125 : 230;
+    const rotateYAngle   = isMobile ? 14 : 22;
+    const translateZStep = isMobile ? 100 : 160;
+
+    let translateX = offset * translateXStep + dragOffset * 0.4;
+    let rotateY = 0;
+    let translateZ = 0;
+    let scale = 1;
+    let opacity = 1;
+    let zIndex = 10 - absOffset;
+    let shadow = '0 10px 25px -5px rgba(0, 0, 0, 0.4)';
+
+    if (offset === 0) {
+      // Center card — largest, upright, in focus
+      rotateY = dragOffset * 0.05;
+      translateZ = 30;
+      scale = isMobile ? 1.04 : 1.08;
+      opacity = 1;
+      zIndex = 30;
+      shadow = '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 35px rgba(245, 158, 11, 0.15)';
+    } else if (offset > 0) {
+      // Right side cards
+      rotateY = -rotateYAngle * Math.min(absOffset, 2);
+      translateZ = -translateZStep * absOffset;
+      scale = Math.max(0.7, 1 - absOffset * 0.14);
+      opacity = Math.max(0.2, 0.85 - absOffset * 0.25);
+      shadow = '0 12px 30px -8px rgba(0, 0, 0, 0.5)';
+    } else {
+      // Left side cards
+      rotateY = rotateYAngle * Math.min(absOffset, 2);
+      translateZ = -translateZStep * absOffset;
+      scale = Math.max(0.7, 1 - absOffset * 0.14);
+      opacity = Math.max(0.2, 0.85 - absOffset * 0.25);
+      shadow = '0 12px 30px -8px rgba(0, 0, 0, 0.5)';
+    }
+
+    // Hide cards beyond visible threshold
+    if (absOffset > 2.5) {
+      opacity = 0;
+      pointerEvents: 'none';
+    }
+
+    return {
+      style: {
+        transform: `translate3d(${translateX}px, 0px, ${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
+        opacity,
+        zIndex,
+        boxShadow: shadow,
+        transition: isDragging
+          ? 'none'
+          : 'transform 650ms cubic-bezier(0.22, 1, 0.36, 1), opacity 650ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 650ms cubic-bezier(0.22, 1, 0.36, 1)',
+      },
+      absOffset,
+      offset,
+    };
+  };
 
   return (
-    <section className="w-full bg-[#091326] border-b border-[#1A2E4D] py-1.5 sm:py-3 overflow-hidden select-none relative group">
-      {/* Soft gradient fade on left and right edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-24 bg-gradient-to-r from-[#070F1E] via-[#070F1E]/80 to-transparent z-10 pointer-events-none"></div>
-      <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-24 bg-gradient-to-l from-[#070F1E] via-[#070F1E]/80 to-transparent z-10 pointer-events-none"></div>
+    <section className="relative w-full py-8 sm:py-14 bg-[#070F1E] overflow-hidden select-none border-b border-[#131F36]">
 
-      {/* Marquee Track (Duplicated for seamless loop) */}
-      <div className="flex gap-2.5 sm:gap-6 w-max animate-marquee group-hover:[animation-play-state:paused] items-center">
-        {[...marqueeProducts, ...marqueeProducts].map((item, idx) => (
-          <a
-            key={`${item.id}-${idx}`}
-            href="#products"
-            className="flex-shrink-0 flex items-center gap-2 bg-[#0F1F38] hover:bg-[#162D50] border border-[#1E3A5F] hover:border-cyan-400/70 rounded-lg sm:rounded-xl p-1 sm:p-2 transition-all duration-300 transform hover:scale-105 shadow-md"
-            title={`${item.name} - ${item.price}`}
-          >
-            <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-md sm:rounded-lg overflow-hidden bg-[#070F1E] shrink-0 border border-[#1E3A5F]">
-              <img
-                src={item.img}
-                alt={item.name}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-            <div className="pr-1.5 hidden sm:block">
-              <div className="text-[11px] font-bold text-slate-200 truncate max-w-[120px]">{item.name}</div>
-              <div className="text-xs font-black text-amber-400 font-['Outfit']">{item.price}</div>
-            </div>
-          </a>
-        ))}
+      {/* Subtle section label */}
+      <div className="max-w-7xl mx-auto px-4 mb-4 sm:mb-6 text-center">
+        <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.25em] text-amber-400">
+          Featured Product Showcase
+        </span>
       </div>
+
+      {/* 3D Perspective Stage Container */}
+      <div
+        ref={containerRef}
+        className="relative w-full h-[290px] sm:h-[380px] flex items-center justify-center cursor-grab active:cursor-grabbing"
+        style={{ perspective: isMobile ? '700px' : '1100px' }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={onMouseLeave}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
+
+        {/* 3D Track */}
+        <div
+          className="relative w-full h-full flex items-center justify-center"
+          style={{ transformStyle: 'preserve-3d' }}
+        >
+          {FEATURED_PRODUCTS.map((prod, index) => {
+            const { style, absOffset, offset } = getCardStyle(index);
+            const isCenter = offset === 0;
+
+            return (
+              <div
+                key={prod.id}
+                onClick={() => {
+                  if (!isCenter) setActiveIndex(index);
+                }}
+                className={`absolute w-[210px] sm:w-[270px] bg-[#0F1D36] rounded-xl sm:rounded-2xl border border-[#1C3056] overflow-hidden flex flex-col transition-colors duration-300 ${
+                  isCenter ? 'border-amber-500/50 cursor-default' : 'cursor-pointer hover:border-slate-500'
+                }`}
+                style={style}
+              >
+                {/* Product Image with subtle parallax inner shift */}
+                <div className="relative aspect-[4/3] sm:aspect-[4/3] overflow-hidden bg-[#050B15]">
+                  <img
+                    src={prod.img}
+                    alt={prod.name}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out"
+                    style={{
+                      transform: `translateX(${offset * -10}px) scale(1.08)`,
+                    }}
+                    loading="lazy"
+                  />
+                  <div className="absolute top-2 left-2">
+                    <span className="bg-[#070F1E]/90 border border-[#1C3056] text-amber-400 text-[8px] sm:text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-wider">
+                      {prod.tag}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card Content Details */}
+                <div className="p-3 sm:p-4 flex flex-col justify-between flex-1 bg-[#0F1D36]">
+                  <div>
+                    <div className="flex items-center justify-between text-[9px] sm:text-[10px] text-slate-400 mb-1">
+                      <span className="font-semibold text-slate-300">{prod.category}</span>
+                      <div className="flex items-center gap-0.5 text-amber-400">
+                        <Star size={10} fill="currentColor" />
+                        <span className="font-bold">{prod.rating}</span>
+                      </div>
+                    </div>
+                    <h4 className="text-xs sm:text-sm font-bold text-white leading-tight line-clamp-1">
+                      {prod.name}
+                    </h4>
+                  </div>
+
+                  <div className="mt-3 pt-2.5 border-t border-[#1C3056] flex items-center justify-between">
+                    <div>
+                      <span className="text-[7px] sm:text-[8px] uppercase font-bold text-slate-500 block leading-none">Price</span>
+                      <span className="text-xs sm:text-base font-black text-amber-400 font-['Outfit']">{prod.price}</span>
+                    </div>
+
+                    <a
+                      href={waLink(prod.name, prod.price)}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-2.5 py-1.5 rounded transition-colors shadow"
+                    >
+                      <MessageCircle size={11} /> Order
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+            );
+          })}
+        </div>
+
+      </div>
+
+      {/* Navigation Arrow Controls */}
+      <div className="flex items-center justify-center gap-4 mt-2 sm:mt-4 z-20 relative">
+        <button
+          onClick={handlePrev}
+          aria-label="Previous Product"
+          className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0F1D36] border border-[#1C3056] hover:border-amber-400 text-slate-300 hover:text-amber-400 flex items-center justify-center transition-all cursor-pointer shadow"
+        >
+          <ChevronLeft size={18} />
+        </button>
+
+        {/* Carousel Indicators */}
+        <div className="flex items-center gap-1.5">
+          {FEATURED_PRODUCTS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveIndex(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              className="h-1.5 rounded-full transition-all duration-300 cursor-pointer"
+              style={{
+                width: i === activeIndex ? '20px' : '6px',
+                backgroundColor: i === activeIndex ? '#F59E0B' : '#1C3056',
+              }}
+            />
+          ))}
+        </div>
+
+        <button
+          onClick={handleNext}
+          aria-label="Next Product"
+          className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0F1D36] border border-[#1C3056] hover:border-amber-400 text-slate-300 hover:text-amber-400 flex items-center justify-center transition-all cursor-pointer shadow"
+        >
+          <ChevronRight size={18} />
+        </button>
+      </div>
+
     </section>
   );
 }
