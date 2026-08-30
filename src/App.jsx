@@ -692,38 +692,48 @@ export default function App() {
           <div className="grid lg:grid-cols-12 gap-6 sm:gap-10 items-center">
 
             <div className="lg:col-span-7 space-y-4 sm:space-y-5">
-              <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">Manufacturing Facility</span>
+              <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-amber-400">Dual Manufacturing Facilities</span>
               <h2 className="text-2xl sm:text-4xl font-black text-white font-['Outfit']">
-                Chakri Road, Rawalpindi
+                Our Rawalpindi Facilities
               </h2>
               <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
-                BE-Clean has been serving the Rawalpindi &amp; Islamabad market since 2016. We manufacture household and commercial cleaning products from our factory on Chakri Road — direct to your door with no distribution markup.
+                BE-Clean operates two manufacturing facilities in Rawalpindi. We manufacture household and commercial cleaning products direct to your door with no middleman markup.
               </p>
 
+              {/* Dual Location Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="flex items-center gap-3 p-3 sm:p-4 rounded-lg bg-[#0F1D36] border border-[#1C3056]">
-                  <MapPin className="text-amber-400 shrink-0" size={16} />
+                <div className="flex items-start gap-3 p-3.5 sm:p-4 rounded-lg bg-[#0F1D36] border border-[#1C3056]">
+                  <MapPin className="text-amber-400 shrink-0 mt-0.5" size={18} />
                   <div>
-                    <div className="text-xs font-bold text-white">Chakri Road, Rawalpindi</div>
-                    <div className="text-[10px] text-slate-400">Punjab, Pakistan</div>
+                    <span className="text-[9px] font-black uppercase tracking-wider text-amber-400 block mb-0.5">Facility Unit 1</span>
+                    <div className="text-xs font-bold text-white">Chakra, Imtiaz Town</div>
+                    <div className="text-[10px] text-slate-400">Rawalpindi, Punjab, Pakistan</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 p-3 sm:p-4 rounded-lg bg-[#0F1D36] border border-[#1C3056]">
-                  <PhoneCall className="text-emerald-400 shrink-0" size={16} />
+
+                <div className="flex items-start gap-3 p-3.5 sm:p-4 rounded-lg bg-[#0F1D36] border border-[#1C3056]">
+                  <MapPin className="text-cyan-400 shrink-0 mt-0.5" size={18} />
                   <div>
-                    <div className="text-xs font-bold text-white">+92 336 1503644</div>
-                    <div className="text-[10px] text-slate-400">WhatsApp / Bulk Orders</div>
+                    <span className="text-[9px] font-black uppercase tracking-wider text-cyan-400 block mb-0.5">Facility Unit 2</span>
+                    <div className="text-xs font-bold text-white">Chakri Road, Pir Mehar Ali Shah Town</div>
+                    <div className="text-[10px] text-slate-400">Rawalpindi, Punjab, Pakistan</div>
                   </div>
                 </div>
               </div>
 
-              <a
-                href={RETAIL_WA}
-                target="_blank" rel="noreferrer"
-                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] uppercase tracking-wider px-5 py-3 rounded transition-colors shadow-md"
-              >
-                <Building2 size={14} /> Become a Retail Partner <ChevronRight size={13} />
-              </a>
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                <a
+                  href={RETAIL_WA}
+                  target="_blank" rel="noreferrer"
+                  className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] uppercase tracking-wider px-5 py-3 rounded transition-colors shadow-md"
+                >
+                  <Building2 size={14} /> Become a Retail Partner <ChevronRight size={13} />
+                </a>
+
+                <div className="flex items-center gap-2 text-xs font-bold text-white px-3 py-2 rounded bg-[#0F1D36] border border-[#1C3056]">
+                  <PhoneCall className="text-emerald-400" size={15} /> +92 336 1503644
+                </div>
+              </div>
             </div>
 
             <div className="lg:col-span-5">
@@ -749,14 +759,17 @@ export default function App() {
               <img src="/logo.png" alt="BE-Clean" className="h-16 sm:h-24 w-auto object-contain" />
               <p className="text-amber-400 font-black text-[10px] uppercase tracking-wider">BE PAKISTANI, BUY PAKISTANI</p>
               <p className="text-slate-500 text-[11px] max-w-xs leading-relaxed">
-                Manufacturing premium cleaning products in Rawalpindi since 2016. Serving homes and businesses across Rawalpindi &amp; Islamabad.
+                Manufacturing premium cleaning products across our two Rawalpindi facilities since 2016. Serving homes and businesses across Rawalpindi &amp; Islamabad.
               </p>
             </div>
 
             <div>
-              <h4 className="font-bold text-white text-xs sm:text-sm mb-3">Contact</h4>
-              <p className="text-slate-500 text-[11px]">Chakri Road, Rawalpindi, Punjab, Pakistan</p>
-              <p className="text-amber-400 font-bold text-xs mt-1">+92 336 1503644</p>
+              <h4 className="font-bold text-white text-xs sm:text-sm mb-3">Factory Locations</h4>
+              <div className="space-y-2 text-slate-400 text-[11px]">
+                <p><strong className="text-amber-400">Unit 1:</strong> Chakra, Imtiaz Town, Rawalpindi</p>
+                <p><strong className="text-cyan-400">Unit 2:</strong> Chakri Road, Pir Mehar Ali Shah Town, Rawalpindi</p>
+              </div>
+              <p className="text-amber-400 font-bold text-xs mt-3">+92 336 1503644</p>
             </div>
 
             <div>
