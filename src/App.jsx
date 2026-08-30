@@ -189,11 +189,13 @@ export default function App() {
         {/* ── Sliding Strip ── */}
         <SlidingStrip />
 
-        {/* ════════════════════════════════════════════════
-            HERO — Editorial asymmetric layout
-            No symmetric card, no 3-badge row, no round stats
-        ════════════════════════════════════════════════ */}
-        <section id="top" className="relative pt-10 sm:pt-16 pb-12 sm:pb-20 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#131F36]">
+        {/* ── Main Content Area ── */}
+        <main>
+          {/* ════════════════════════════════════════════════
+              HERO — Editorial asymmetric layout
+              No symmetric card, no 3-badge row, no round stats
+          ════════════════════════════════════════════════ */}
+          <section id="top" className="relative pt-10 sm:pt-16 pb-12 sm:pb-20 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#131F36]">
 
           {/* Horizontal rule + label */}
           <div className="flex items-center gap-4 mb-8 sm:mb-12">
@@ -748,6 +750,7 @@ export default function App() {
 
           </div>
         </section>
+        </main>
 
         {/* ════════════════════════════════════════════════
             FOOTER
