@@ -1,6 +1,19 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, MessageCircle, Star } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { PRODUCTS } from '../data/products';
+
+const WhatsAppIcon = ({ size = 16, className = "" }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={`inline-block shrink-0 ${className}`}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.461c-1.884 0-3.647-.507-5.166-1.39l-.37-.217-3.837 1.006 1.024-3.74-.24-.382a10.87 10.87 0 0 1-1.666-5.836c0-6.012 4.89-10.902 10.902-10.902 2.91 0 5.648 1.134 7.706 3.194a10.84 10.84 0 0 1 3.191 7.708c0 6.013-4.89 10.903-10.902 10.903m0-20.003C5.932 1.84 1 6.772 1 12.843c0 2.298.705 4.437 1.91 6.208L1 23l4.088-1.072c1.71 1.06 3.731 1.674 5.922 1.674 6.072 0 11.003-4.932 11.003-11.003 0-2.939-1.144-5.702-3.224-7.783A10.94 10.94 0 0 0 12.051 1.84z" />
+  </svg>
+);
 
 const PHONE = "923361503644";
 const waLink = (name, price) =>
@@ -244,7 +257,7 @@ export default function SlidingStrip() {
                       onClick={(e) => e.stopPropagation()}
                       className="inline-flex items-center gap-0.5 sm:gap-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[8px] sm:text-[10px] font-bold uppercase tracking-wider px-1.5 py-1 sm:px-2.5 sm:py-1.5 rounded transition-colors shadow"
                     >
-                      <MessageCircle size={10} /> <span className="hidden sm:inline">Order</span>
+                      <WhatsAppIcon size={12} className="text-white" /> <span className="hidden sm:inline">Order</span>
                     </a>
                   </div>
                 </div>

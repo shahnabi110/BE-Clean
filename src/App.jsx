@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
 import {
-  MessageCircle,
   Menu,
   X,
   ChevronRight,
@@ -18,6 +17,22 @@ import {
 import { PRODUCTS, CATEGORIES } from "./data/products";
 import SlidingStrip from "./components/SlidingStrip";
 import LoadingScreen from "./components/LoadingScreen";
+
+/* ------------------------------------------------------------------
+   BE-CLEAN — Authentic WhatsApp Icon Component
+------------------------------------------------------------------ */
+export const WhatsAppIcon = ({ size = 20, className = "" }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={`inline-block shrink-0 ${className}`}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.461c-1.884 0-3.647-.507-5.166-1.39l-.37-.217-3.837 1.006 1.024-3.74-.24-.382a10.87 10.87 0 0 1-1.666-5.836c0-6.012 4.89-10.902 10.902-10.902 2.91 0 5.648 1.134 7.706 3.194a10.84 10.84 0 0 1 3.191 7.708c0 6.013-4.89 10.903-10.902 10.903m0-20.003C5.932 1.84 1 6.772 1 12.843c0 2.298.705 4.437 1.91 6.208L1 23l4.088-1.072c1.71 1.06 3.731 1.674 5.922 1.674 6.072 0 11.003-4.932 11.003-11.003 0-2.939-1.144-5.702-3.224-7.783A10.94 10.94 0 0 0 12.051 1.84z" />
+  </svg>
+);
 
 /* ------------------------------------------------------------------
    BE-CLEAN — Verified Customer Reviews (local, specific, real)
@@ -139,9 +154,9 @@ export default function App() {
           <a
             href={DISTRIBUTOR_WA}
             target="_blank" rel="noreferrer"
-            className="inline-flex items-center gap-1 text-emerald-400 font-bold hover:underline ml-2 text-[10px] sm:text-[11px]"
+            className="inline-flex items-center gap-1.5 text-emerald-400 font-bold hover:underline ml-2 text-[10px] sm:text-[11px]"
           >
-            <MessageCircle size={13} className="fill-emerald-400 text-[#040C18]" /> Wholesale / Distributor Rates
+            <WhatsAppIcon size={14} className="text-emerald-400" /> Wholesale / Distributor Rates
           </a>
         </div>
 
@@ -167,7 +182,7 @@ export default function App() {
                 target="_blank" rel="noreferrer"
                 className="hidden sm:inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] uppercase tracking-wider px-4 py-2 rounded transition-colors shadow-md"
               >
-                <MessageCircle size={14} className="fill-white text-emerald-600" /> WhatsApp Chat
+                <WhatsAppIcon size={16} className="text-white" /> WhatsApp Chat
               </a>
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
@@ -184,7 +199,7 @@ export default function App() {
               <a href="#products"     onClick={() => setMenuOpen(false)} className="py-1 text-amber-400">Products</a>
               <a href="#ranges"       onClick={() => setMenuOpen(false)} className="py-1 hover:text-white">Ranges</a>
               <a href="#power-test"   onClick={() => setMenuOpen(false)} className="py-1 hover:text-white">Performance</a>
-              <a href="#distributors" onClick={() => setMenuOpen(false)} className="py-1 text-emerald-400 flex items-center gap-1.5"><MessageCircle size={13} /> Wholesale & Distributors</a>
+              <a href="#distributors" onClick={() => setMenuOpen(false)} className="py-1 text-emerald-400 flex items-center gap-1.5"><WhatsAppIcon size={14} className="text-emerald-400" /> Wholesale &amp; Distributors</a>
               <a href="#factory"      onClick={() => setMenuOpen(false)} className="py-1 hover:text-white">Factory</a>
               <a
                 href={waLink("Hello BE-Clean, I'd like to order.")}
@@ -192,7 +207,7 @@ export default function App() {
                 onClick={() => setMenuOpen(false)}
                 className="inline-flex items-center justify-center gap-2 bg-emerald-600 text-white font-bold py-2.5 rounded mt-1"
               >
-                <MessageCircle size={15} className="fill-white text-emerald-600" /> WhatsApp Order
+                <WhatsAppIcon size={16} className="text-white" /> WhatsApp Order
               </a>
             </div>
           )}
@@ -250,21 +265,21 @@ export default function App() {
                   ))}
                 </div>
 
-                {/* CTAs with WhatsApp logo badges */}
+                {/* CTAs with official WhatsApp logo badges */}
                 <div className="flex flex-wrap gap-3 pt-1">
                   <a
                     href={waLink("Hello BE-Clean, I am interested in purchasing your products.")}
                     target="_blank" rel="noreferrer"
                     className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] uppercase tracking-wider px-5 py-3 rounded transition-colors shadow-md"
                   >
-                    <MessageCircle size={16} className="fill-white text-emerald-600" /> Order on WhatsApp
+                    <WhatsAppIcon size={18} className="text-white" /> Order on WhatsApp
                   </a>
                   <a
                     href={DISTRIBUTOR_WA}
                     target="_blank" rel="noreferrer"
                     className="inline-flex items-center gap-2 bg-[#0F1D36] hover:bg-[#162B4D] text-amber-400 border border-amber-500/40 font-bold text-[11px] uppercase tracking-wider px-5 py-3 rounded transition-colors shadow-sm"
                   >
-                    <MessageCircle size={15} className="fill-emerald-400 text-[#0F1D36]" /> Wholesale Rates
+                    <WhatsAppIcon size={16} className="text-emerald-400" /> Wholesale Rates
                   </a>
                 </div>
               </div>
@@ -467,7 +482,7 @@ export default function App() {
                             target="_blank" rel="noreferrer"
                             className="inline-flex items-center justify-center gap-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[9px] sm:text-[11px] font-bold uppercase tracking-wider px-2 py-1.5 sm:px-3 sm:py-2 rounded transition-colors"
                           >
-                            <MessageCircle size={12} className="fill-white text-emerald-600" /> Order
+                            <WhatsAppIcon size={13} className="text-white" /> Order
                           </a>
                         </div>
                       </div>
@@ -527,7 +542,7 @@ export default function App() {
           </section>
 
           {/* ════════════════════════════════════════════════
-              NEW: DISTRIBUTORS & WHOLESALE PARTNERSHIP SECTION
+              DISTRIBUTORS & WHOLESALE PARTNERSHIP SECTION
           ════════════════════════════════════════════════ */}
           <section id="distributors" className="py-8 sm:py-16 px-3 sm:px-8 max-w-7xl mx-auto border-b border-[#131F36]">
             <div className="bg-[#0A1628] rounded-2xl sm:rounded-3xl p-5 sm:p-12 border border-[#1C3056] relative overflow-hidden shadow-2xl">
@@ -582,23 +597,27 @@ export default function App() {
 
               </div>
 
-              {/* Action Bar with WhatsApp Logo & Direct Phone link */}
+              {/* Action Bar with Official WhatsApp Logo */}
               <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-[#1C3056]">
                 <div className="flex items-center gap-3">
                   <a
                     href={DISTRIBUTOR_WA}
                     target="_blank" rel="noreferrer"
-                    className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] sm:text-xs uppercase tracking-wider px-5 py-3 sm:px-6 sm:py-3.5 rounded-xl transition-all shadow-lg hover:shadow-emerald-900/50"
+                    className="inline-flex items-center gap-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] sm:text-xs uppercase tracking-wider px-5 py-3 sm:px-6 sm:py-3.5 rounded-xl transition-all shadow-lg hover:shadow-emerald-900/50"
                   >
-                    <MessageCircle size={18} className="fill-white text-emerald-600" />
+                    <WhatsAppIcon size={20} className="text-white" />
                     <span>Request Wholesale Rate List on WhatsApp</span>
                   </a>
                 </div>
 
-                <div className="flex items-center gap-2 text-xs font-bold text-slate-300 bg-[#0F1D36] border border-[#1C3056] px-4 py-2.5 rounded-xl">
-                  <MessageCircle size={15} className="text-emerald-400 fill-emerald-400" />
+                <a
+                  href={waLink("Hello BE-Clean, I have a wholesale helpline inquiry.")}
+                  target="_blank" rel="noreferrer"
+                  className="flex items-center gap-2 text-xs font-bold text-slate-300 bg-[#0F1D36] border border-[#1C3056] hover:border-emerald-500 px-4 py-2.5 rounded-xl transition-colors"
+                >
+                  <WhatsAppIcon size={16} className="text-emerald-400" />
                   <span>Wholesale Helpline: <strong className="text-amber-400">+92 336 1503644</strong></span>
-                </div>
+                </a>
               </div>
 
             </div>
@@ -816,7 +835,7 @@ export default function App() {
                     target="_blank" rel="noreferrer"
                     className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] uppercase tracking-wider px-5 py-3 rounded transition-colors shadow-md"
                   >
-                    <MessageCircle size={15} className="fill-white text-emerald-600" /> Distributor Inquiry <ChevronRight size={13} />
+                    <WhatsAppIcon size={16} className="text-white" /> Distributor Inquiry <ChevronRight size={13} />
                   </a>
 
                   <a
@@ -824,7 +843,7 @@ export default function App() {
                     target="_blank" rel="noreferrer"
                     className="flex items-center gap-2 text-xs font-bold text-white px-3.5 py-2.5 rounded bg-[#0F1D36] border border-[#1C3056] hover:border-emerald-500 transition-colors"
                   >
-                    <MessageCircle className="text-emerald-400 fill-emerald-400" size={15} /> +92 336 1503644
+                    <WhatsAppIcon size={16} className="text-emerald-400" /> +92 336 1503644
                   </a>
                 </div>
               </div>
@@ -868,7 +887,7 @@ export default function App() {
                 target="_blank" rel="noreferrer"
                 className="inline-flex items-center gap-1.5 text-amber-400 font-bold text-xs mt-3 hover:underline"
               >
-                <MessageCircle size={14} className="fill-emerald-400 text-[#040C18]" /> +92 336 1503644
+                <WhatsAppIcon size={14} className="text-emerald-400" /> +92 336 1503644
               </a>
             </div>
 
@@ -880,14 +899,14 @@ export default function App() {
                   target="_blank" rel="noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] uppercase tracking-wider px-4 py-2.5 rounded transition-colors"
                 >
-                  <MessageCircle size={14} className="fill-white text-emerald-600" /> WhatsApp Direct Order
+                  <WhatsAppIcon size={15} className="text-white" /> WhatsApp Direct Order
                 </a>
                 <a
                   href={DISTRIBUTOR_WA}
                   target="_blank" rel="noreferrer"
                   className="inline-flex items-center justify-center gap-2 bg-[#0F1D36] hover:bg-[#162B4D] text-amber-400 border border-amber-500/40 font-bold text-[10px] uppercase tracking-wider px-4 py-2.5 rounded transition-colors"
                 >
-                  <MessageCircle size={14} className="fill-emerald-400 text-[#0F1D36]" /> Wholesale Rate Sheet
+                  <WhatsAppIcon size={15} className="text-emerald-400" /> Wholesale Rate Sheet
                 </a>
               </div>
             </div>
@@ -898,14 +917,15 @@ export default function App() {
           </div>
         </footer>
 
-        {/* Floating WhatsApp button */}
+        {/* Floating WhatsApp Action Button */}
         <a
           href={waLink("Hello BE-Clean, I have a question about your products.")}
           target="_blank" rel="noreferrer"
-          className="fixed bottom-5 right-5 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-emerald-600 hover:bg-emerald-500 flex items-center justify-center shadow-xl transition-transform hover:scale-110"
+          className="fixed bottom-5 right-5 z-50 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] hover:bg-[#20bd5a] flex items-center justify-center shadow-[0_10px_25px_rgba(37,211,102,0.4)] transition-transform hover:scale-110 active:scale-95"
           aria-label="Chat on WhatsApp"
+          title="Chat on WhatsApp"
         >
-          <MessageCircle size={24} className="text-white fill-white" />
+          <WhatsAppIcon size={28} className="text-white" />
         </a>
 
       </div>
