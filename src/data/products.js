@@ -51,11 +51,11 @@ export const PRODUCTS = [
   },
   {
     id: 5,
-    name: "Tiger 300ml",
+    name: "Tiger 300ml (Acid)",
     category: "Toilet",
     desc: "300ml active acid bowl stain lifter.",
     price: "Rs. 50",
-    tag: "Quick Action",
+    tag: "Quick Acid",
     rating: 4.6,
     reviews: 54,
     img: "/images/products/tehzaabblacktiger.jpeg"
@@ -73,11 +73,11 @@ export const PRODUCTS = [
   },
   {
     id: 7,
-    name: "Tiger Litre",
+    name: "Tiger Litre (Acid)",
     category: "Toilet",
     desc: "1 Litre heavy acid bowl & drain restorer.",
     price: "Rs. 200",
-    tag: "Power Pack",
+    tag: "Power Acid",
     rating: 4.8,
     reviews: 135,
     img: "/images/products/tehzaabblacktiger.jpeg"
@@ -284,7 +284,7 @@ export const PRODUCTS = [
     tag: "Extra White",
     rating: 4.8,
     reviews: 96,
-    img: "/images/products/bleachlargebottle.jpeg"
+    img: "/images/products/bleachliterbottle.jpeg"
   },
   {
     id: 23,
@@ -295,7 +295,7 @@ export const PRODUCTS = [
     tag: "Litre Value",
     rating: 4.9,
     reviews: 120,
-    img: "/images/products/bleachliterbottle.jpeg"
+    img: "/images/products/bleachlargebottle.jpeg"
   },
   {
     id: 24,
@@ -378,6 +378,28 @@ export const PRODUCTS = [
   },
 
   // ── SCRUBBERS & SPONGES ────────────────────────────────────────
+  {
+    id: 31,
+    name: "Spiral Small (2 in 1)",
+    category: "Scrubbers",
+    desc: "Compact stainless steel kitchen wire scrubber 2-in-1 pack.",
+    price: "Rs. 50",
+    tag: "2-in-1 Steel",
+    rating: 4.7,
+    reviews: 60,
+    img: "/images/products/chotibartantaar.jpeg"
+  },
+  {
+    id: 32,
+    name: "Spiral Large (2 in 1)",
+    category: "Scrubbers",
+    desc: "Jumbo heavy-duty dish scrubbing wire 2-in-1 pack.",
+    price: "Rs. 100",
+    tag: "2-in-1 Jumbo",
+    rating: 4.8,
+    reviews: 88,
+    img: "/images/products/bartanwalitar_jumbo.jpeg"
+  },
   {
     id: 33,
     name: "Stainless Steel Jumbo",
@@ -558,9 +580,9 @@ export const PRODUCTS = [
   },
   {
     id: 49,
-    name: "Carpet & Rug Cleaner Litre",
+    name: "Carpet & Rug Cleaner 1300ml",
     category: "Specialty",
-    desc: "1 Litre heavy stain shampoo for home and vehicle carpets.",
+    desc: "1.3L heavy stain shampoo for home and vehicle carpets.",
     price: "Rs. 650",
     tag: "Deep Foam",
     rating: 4.9,
