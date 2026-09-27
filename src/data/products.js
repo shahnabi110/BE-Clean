@@ -84,9 +84,9 @@ export const PRODUCTS = [
   },
   {
     id: 8,
-    name: "Washroom Cleaner Big (Harbic)",
+    name: "Harbic 750ml",
     category: "Toilet",
-    desc: "Big jumbo bottle active washroom & ceramic bowl stain remover.",
+    desc: "750ml active toilet bowl stain remover.",
     price: "Rs. 350",
     tag: "Ultra Power",
     rating: 4.9,
@@ -95,9 +95,9 @@ export const PRODUCTS = [
   },
   {
     id: 9,
-    name: "Washroom Cleaner Medium (Harbic)",
+    name: "Harbic 500ml",
     category: "Toilet",
-    desc: "Medium bottle active washroom & toilet bowl stain remover.",
+    desc: "500ml active toilet bowl stain remover.",
     price: "Rs. 250",
     tag: "Active Clean",
     rating: 4.8,
@@ -126,6 +126,39 @@ export const PRODUCTS = [
     tag: "Deep Power",
     rating: 4.8,
     reviews: 87,
+    img: "/images/products/depex250mll.jpeg"
+  },
+  {
+    id: 53,
+    name: "Bathroom Cleaner 250ml",
+    category: "Bathroom",
+    desc: "250ml active bathroom tile & fixture cleaner gel.",
+    price: "Rs. 150",
+    tag: "Tile Fresh",
+    rating: 4.7,
+    reviews: 58,
+    img: "/images/products/bathroomcleanersmallbottle.jpeg"
+  },
+  {
+    id: 54,
+    name: "Bathroom Cleaner 500ml",
+    category: "Bathroom",
+    desc: "500ml active bathroom tile & fixture cleaner gel.",
+    price: "Rs. 300",
+    tag: "Deep Clean",
+    rating: 4.8,
+    reviews: 76,
+    img: "/images/products/bathroomcleanersmallbottle.jpeg"
+  },
+  {
+    id: 55,
+    name: "Bathroom Cleaner Litre",
+    category: "Bathroom",
+    desc: "1 Litre heavy-duty bathroom cleaner gel.",
+    price: "Rs. 500",
+    tag: "Max Value",
+    rating: 4.9,
+    reviews: 94,
     img: "/images/products/bathroomcleanersmallbottle.jpeg"
   },
   {
@@ -323,7 +356,7 @@ export const PRODUCTS = [
   },
   {
     id: 29,
-    name: "Heavy Kitchen Degreaser Litre",
+    name: "Heavy Kitchen Degreaser 1300ml",
     category: "Kitchen",
     desc: "Commercial strength kitchen grease & oil cutting concentrate.",
     price: "Rs. 600",
@@ -345,28 +378,6 @@ export const PRODUCTS = [
   },
 
   // ── SCRUBBERS & SPONGES ────────────────────────────────────────
-  {
-    id: 31,
-    name: "Spiral Small",
-    category: "Scrubbers",
-    desc: "Compact stainless steel kitchen wire scrubber.",
-    price: "Rs. 50",
-    tag: "Steel Scrubber",
-    rating: 4.7,
-    reviews: 60,
-    img: "/images/products/chotibartantaar.jpeg"
-  },
-  {
-    id: 32,
-    name: "Spiral Large (Jumbo)",
-    category: "Scrubbers",
-    desc: "Jumbo heavy-duty dish scrubbing wire.",
-    price: "Rs. 100",
-    tag: "Jumbo Scrubber",
-    rating: 4.8,
-    reviews: 88,
-    img: "/images/products/bartanwalitar_jumbo.jpeg"
-  },
   {
     id: 33,
     name: "Stainless Steel Jumbo",
