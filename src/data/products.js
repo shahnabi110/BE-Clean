@@ -58,18 +58,18 @@ export const PRODUCTS = [
     tag: "Quick Acid",
     rating: 4.6,
     reviews: 54,
-    img: "/images/products/tehzaabblacktiger.jpeg"
+    img: "/images/products/tiger_drain_opener.jpeg"
   },
   {
     id: 6,
     name: "Black Tiger 600ml",
     category: "Toilet",
-    desc: "600ml ultra-acid heavy toilet stain cleaner.",
+    desc: "600ml heavy-duty active drain opener & toilet acid cleaner.",
     price: "Rs. 100",
     tag: "Ultra Acid Gel",
     rating: 4.9,
     reviews: 162,
-    img: "/images/products/tehzaabblacktiger.jpeg"
+    img: "/images/products/tiger_drain_opener.jpeg"
   },
   {
     id: 7,
@@ -80,7 +80,7 @@ export const PRODUCTS = [
     tag: "Power Acid",
     rating: 4.8,
     reviews: 135,
-    img: "/images/products/tehzaabblacktiger.jpeg"
+    img: "/images/products/tiger_drain_opener.jpeg"
   },
   {
     id: 8,
