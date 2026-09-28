@@ -69,7 +69,7 @@ export const PRODUCTS = [
     tag: "Ultra Acid Gel",
     rating: 4.9,
     reviews: 162,
-    img: "/images/products/tiger_drain_opener.jpeg"
+    img: "/images/products/tehzaabblacktiger.jpeg"
   },
   {
     id: 7,
